@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package internal
 
-import com.infomaniak.auth.lib.internal.KeyPairManagerImpl
+package com.infomaniak.auth.lib.internal
+
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertNotNull
