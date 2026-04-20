@@ -32,10 +32,7 @@ sealed interface AppStatus {
          */
         data object NotMigrating : LoginRequired
 
-        data class MustReLogin(
-            val accountId: Long,
-            val skip: () -> Unit
-        ) : LoginRequired
+        data class MustReLogin(val accountId: Long) : AppStatus
     }
 
     /**
