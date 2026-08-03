@@ -53,5 +53,6 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+publish = { id = "infomaniak.publishPlugin" }
 skie = { id = "co.touchlab.skie", version.ref = "skie" }
 sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }

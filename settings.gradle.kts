@@ -43,3 +43,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
+
+include(":AuthenticatorCore")
