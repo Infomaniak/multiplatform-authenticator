@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.infomaniak.auth.lib.internal
+package com.infomaniak.multiplatform_authenticator.core.internal
 
 // See https://www.oss.com/asn1/resources/asn1-made-simple/asn1-quick-reference.html#Types
 internal object AsnOneTypes {

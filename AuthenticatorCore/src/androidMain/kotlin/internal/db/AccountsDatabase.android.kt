@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.infomaniak.auth.lib.internal.db
+package com.infomaniak.multiplatform_authenticator.core.internal.db
 
 import androidx.room.Room
 import splitties.init.appCtx

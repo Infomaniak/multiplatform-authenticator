@@ -15,11 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.infomaniak.auth.lib.internal
+package com.infomaniak.multiplatform_authenticator.core.internal
 
-import com.infomaniak.auth.lib.internal.utils.BackupExclusionOnlyApplePlatforms
-import com.infomaniak.auth.lib.internal.utils.checkFileExists
-import com.infomaniak.auth.lib.internal.utils.createBackupExcludedFile
+import com.infomaniak.multiplatform_authenticator.core.internal.utils.BackupExclusionOnlyApplePlatforms
+import com.infomaniak.multiplatform_authenticator.core.internal.utils.checkFileExists
+import com.infomaniak.multiplatform_authenticator.core.internal.utils.createBackupExcludedFile
 import kotlin.random.Random
 
 internal object RestoreFromBackupDetector {

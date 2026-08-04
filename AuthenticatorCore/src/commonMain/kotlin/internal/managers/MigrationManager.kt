@@ -15,25 +15,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.infomaniak.auth.lib.internal.managers
+package com.infomaniak.multiplatform_authenticator.core.internal.managers
 
-import com.infomaniak.auth.lib.internal.KeyPairManager
-import com.infomaniak.auth.lib.internal.MigrationAuthentication
-import com.infomaniak.auth.lib.internal.RestoreFromBackupDetector
-import com.infomaniak.auth.lib.internal.db.AccountEntity
-import com.infomaniak.auth.lib.internal.db.AccountsDatabase
-import com.infomaniak.auth.lib.internal.extensions.cancellable
-import com.infomaniak.auth.lib.internal.extensions.toEntity
-import com.infomaniak.auth.lib.internal.models.AuthResult
-import com.infomaniak.auth.lib.internal.models.OtpPayload
-import com.infomaniak.auth.lib.internal.otp.TotpGenerator
-import com.infomaniak.auth.lib.internal.otp.getLegacyAccounts
-import com.infomaniak.auth.lib.internal.otp.getSecretFor
-import com.infomaniak.auth.lib.internal.otp.needMigration
-import com.infomaniak.auth.lib.internal.requests.WebAuthnRequests
-import com.infomaniak.auth.lib.models.migration.SharedApiToken
-import com.infomaniak.auth.lib.network.exceptions.ApiException
-import com.infomaniak.auth.lib.network.interfaces.CrashReportInterface
+import com.infomaniak.multiplatform_authenticator.core.internal.KeyPairManager
+import com.infomaniak.multiplatform_authenticator.core.internal.MigrationAuthentication
+import com.infomaniak.multiplatform_authenticator.core.internal.RestoreFromBackupDetector
+import com.infomaniak.multiplatform_authenticator.core.internal.db.AccountEntity
+import com.infomaniak.multiplatform_authenticator.core.internal.db.AccountsDatabase
+import com.infomaniak.multiplatform_authenticator.core.internal.extensions.cancellable
+import com.infomaniak.multiplatform_authenticator.core.internal.extensions.toEntity
+import com.infomaniak.multiplatform_authenticator.core.internal.models.AuthResult
+import com.infomaniak.multiplatform_authenticator.core.internal.models.OtpPayload
+import com.infomaniak.multiplatform_authenticator.core.internal.otp.TotpGenerator
+import com.infomaniak.multiplatform_authenticator.core.internal.otp.getLegacyAccounts
+import com.infomaniak.multiplatform_authenticator.core.internal.otp.getSecretFor
+import com.infomaniak.multiplatform_authenticator.core.internal.otp.needMigration
+import com.infomaniak.multiplatform_authenticator.core.internal.requests.WebAuthnRequests
+import com.infomaniak.multiplatform_authenticator.core.models.migration.SharedApiToken
+import com.infomaniak.multiplatform_authenticator.core.network.exceptions.ApiException
+import com.infomaniak.multiplatform_authenticator.core.network.interfaces.CrashReportInterface
 import com.osmerion.kotlin.io.encoding.Base32
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

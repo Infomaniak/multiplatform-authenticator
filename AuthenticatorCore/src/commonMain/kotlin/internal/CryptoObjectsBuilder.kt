@@ -15,18 +15,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.infomaniak.auth.lib.internal
+package com.infomaniak.multiplatform_authenticator.core.internal
 
-import com.infomaniak.auth.lib.internal.models.ClientExtensionResults
-import com.infomaniak.auth.lib.internal.models.PasskeysOptions
-import com.infomaniak.auth.lib.internal.models.RegisterPasskey
-import com.infomaniak.auth.lib.internal.models.RegisterPasskeyResponse
-import com.infomaniak.auth.lib.internal.models.WebAuthnClientData
-import com.infomaniak.auth.lib.internal.utils.getDeviceInfo
-import com.infomaniak.auth.lib.internal.utils.getKeyCoordinates
-import com.infomaniak.auth.lib.internal.webauthn.KeyAlgorithm
-import com.infomaniak.auth.lib.internal.webauthn.createEncodedWebAuthnAttestationObject
-import com.infomaniak.auth.lib.internal.webauthn.keyCoseOf
+import com.infomaniak.multiplatform_authenticator.core.internal.models.ClientExtensionResults
+import com.infomaniak.multiplatform_authenticator.core.internal.models.PasskeysOptions
+import com.infomaniak.multiplatform_authenticator.core.internal.models.RegisterPasskey
+import com.infomaniak.multiplatform_authenticator.core.internal.models.RegisterPasskeyResponse
+import com.infomaniak.multiplatform_authenticator.core.internal.models.WebAuthnClientData
+import com.infomaniak.multiplatform_authenticator.core.internal.utils.getDeviceInfo
+import com.infomaniak.multiplatform_authenticator.core.internal.utils.getKeyCoordinates
+import com.infomaniak.multiplatform_authenticator.core.internal.webauthn.KeyAlgorithm
+import com.infomaniak.multiplatform_authenticator.core.internal.webauthn.createEncodedWebAuthnAttestationObject
+import com.infomaniak.multiplatform_authenticator.core.internal.webauthn.keyCoseOf
 import io.ktor.utils.io.core.toByteArray
 import kotlinx.io.Buffer
 import kotlinx.io.readByteArray

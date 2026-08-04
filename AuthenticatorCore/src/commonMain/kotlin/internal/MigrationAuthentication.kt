@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.infomaniak.auth.lib.internal
+package com.infomaniak.multiplatform_authenticator.core.internal
 
-import com.infomaniak.auth.lib.models.migration.SharedApiToken
+import com.infomaniak.multiplatform_authenticator.core.models.migration.SharedApiToken
 
 internal sealed interface MigrationAuthentication {
     data class CrossAppLogin(val derivedToken: SharedApiToken) : MigrationAuthentication

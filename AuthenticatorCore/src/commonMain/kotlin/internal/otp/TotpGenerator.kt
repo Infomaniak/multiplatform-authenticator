@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.infomaniak.auth.lib.internal.otp
+package com.infomaniak.multiplatform_authenticator.core.internal.otp
 
-import com.infomaniak.auth.lib.internal.models.LegacyUser
+import com.infomaniak.multiplatform_authenticator.core.internal.models.LegacyUser
 import okio.ByteString
 import okio.ByteString.Companion.toByteString
 import kotlin.math.pow

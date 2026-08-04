@@ -15,10 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.infomaniak.auth.lib.models.migration.user
+package com.infomaniak.multiplatform_authenticator.core.models.migration.user
 
-import com.infomaniak.auth.lib.models.migration.SharedApiToken
-import com.infomaniak.auth.lib.models.migration.user.preferences.Preferences
+import com.infomaniak.multiplatform_authenticator.core.models.migration.SharedApiToken
+import com.infomaniak.multiplatform_authenticator.core.models.migration.user.preferences.Preferences
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient

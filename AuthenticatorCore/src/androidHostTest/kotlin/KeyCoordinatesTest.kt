@@ -16,13 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.infomaniak.auth.lib
+package com.infomaniak.multiplatform_authenticator.core
 
-import com.infomaniak.auth.lib.internal.AsnOneTypes
-import com.infomaniak.auth.lib.internal.generateEcKeyPair
-import com.infomaniak.auth.lib.internal.utils.getKeyCoordinates
-import com.infomaniak.auth.lib.internal.utils.keyCoordinatesOf
-import com.infomaniak.auth.lib.internal.webauthn.PublicKeyXY
+import com.infomaniak.multiplatform_authenticator.core.internal.AsnOneTypes
+import com.infomaniak.multiplatform_authenticator.core.internal.generateEcKeyPair
+import com.infomaniak.multiplatform_authenticator.core.internal.utils.getKeyCoordinates
+import com.infomaniak.multiplatform_authenticator.core.internal.utils.keyCoordinatesOf
+import com.infomaniak.multiplatform_authenticator.core.internal.webauthn.PublicKeyXY
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
 import kotlin.test.assertEquals

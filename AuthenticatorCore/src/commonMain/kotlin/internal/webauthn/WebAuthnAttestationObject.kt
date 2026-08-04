@@ -17,7 +17,7 @@
  */
 @file:OptIn(ExperimentalSerializationApi::class)
 
-package com.infomaniak.auth.lib.internal.webauthn
+package com.infomaniak.multiplatform_authenticator.core.internal.webauthn
 
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable

@@ -15,18 +15,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.infomaniak.auth.lib.internal.utils
+package com.infomaniak.multiplatform_authenticator.core.internal.utils
 
-import com.infomaniak.auth.lib.internal.AsnOneTypes
-import com.infomaniak.auth.lib.internal.encodeAsn1Integer
-import com.infomaniak.auth.lib.internal.extensions.buildCFDictionary
-import com.infomaniak.auth.lib.internal.extensions.firstOrElse
-import com.infomaniak.auth.lib.internal.extensions.set
-import com.infomaniak.auth.lib.internal.extensions.toByteArray
-import com.infomaniak.auth.lib.internal.extensions.toCFDataRef
-import com.infomaniak.auth.lib.internal.extensions.toNSData
-import com.infomaniak.auth.lib.internal.extensions.trimOrPadStart
-import com.infomaniak.auth.lib.internal.extensions.tryIt
+import com.infomaniak.multiplatform_authenticator.core.internal.AsnOneTypes
+import com.infomaniak.multiplatform_authenticator.core.internal.encodeAsn1Integer
+import com.infomaniak.multiplatform_authenticator.core.internal.extensions.buildCFDictionary
+import com.infomaniak.multiplatform_authenticator.core.internal.extensions.firstOrElse
+import com.infomaniak.multiplatform_authenticator.core.internal.extensions.set
+import com.infomaniak.multiplatform_authenticator.core.internal.extensions.toByteArray
+import com.infomaniak.multiplatform_authenticator.core.internal.extensions.toCFDataRef
+import com.infomaniak.multiplatform_authenticator.core.internal.extensions.toNSData
+import com.infomaniak.multiplatform_authenticator.core.internal.extensions.trimOrPadStart
+import com.infomaniak.multiplatform_authenticator.core.internal.extensions.tryIt
 import kotlinx.cinterop.BetaInteropApi
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.memScoped

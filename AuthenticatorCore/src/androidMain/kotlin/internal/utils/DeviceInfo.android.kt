@@ -15,10 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.infomaniak.auth.lib.internal.utils
+package com.infomaniak.multiplatform_authenticator.core.internal.utils
 
 import android.os.Build
-import com.infomaniak.auth.lib.internal.webauthn.DeviceInfo
+import com.infomaniak.multiplatform_authenticator.core.internal.webauthn.DeviceInfo
 
 internal actual fun getDeviceInfo(): DeviceInfo {
     return DeviceInfo(

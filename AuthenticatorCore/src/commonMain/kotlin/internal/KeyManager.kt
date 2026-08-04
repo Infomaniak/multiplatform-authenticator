@@ -15,12 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.infomaniak.auth.lib.internal
+package com.infomaniak.multiplatform_authenticator.core.internal
 
-import com.infomaniak.auth.lib.internal.Failure.KeyManagement.GenerationFailed
-import com.infomaniak.auth.lib.internal.Failure.KeyManagement.KeyExtractionFailed
-import com.infomaniak.auth.lib.internal.Failure.KeyManagement.KeyNotFound
-import com.infomaniak.auth.lib.internal.utils.Xor
+import com.infomaniak.multiplatform_authenticator.core.internal.Failure.KeyManagement.GenerationFailed
+import com.infomaniak.multiplatform_authenticator.core.internal.Failure.KeyManagement.KeyExtractionFailed
+import com.infomaniak.multiplatform_authenticator.core.internal.Failure.KeyManagement.KeyNotFound
+import com.infomaniak.multiplatform_authenticator.core.internal.utils.Xor
 
 internal expect fun createKeyPairManager(): KeyPairManager
 

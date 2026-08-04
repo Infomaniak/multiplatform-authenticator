@@ -17,7 +17,7 @@
  */
 @file:Suppress("NOTHING_TO_INLINE")
 
-package com.infomaniak.auth.lib.internal.extensions
+package com.infomaniak.multiplatform_authenticator.core.internal.extensions
 
 import kotlin.experimental.and
 import kotlin.experimental.inv

@@ -15,12 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.infomaniak.auth.lib.internal.room.legacy
+package com.infomaniak.multiplatform_authenticator.core.internal.room.legacy
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Query
-import com.infomaniak.auth.lib.internal.models.LegacyUser
+import com.infomaniak.multiplatform_authenticator.core.internal.models.LegacyUser
 
 @Dao
 internal interface OTPUserDao {

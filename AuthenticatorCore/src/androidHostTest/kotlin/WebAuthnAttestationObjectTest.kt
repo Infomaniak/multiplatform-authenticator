@@ -18,9 +18,9 @@
 
 @file:Suppress("SameParameterValue")
 
-package com.infomaniak.auth.lib
+package com.infomaniak.multiplatform_authenticator.core
 
-import com.infomaniak.auth.lib.internal.webauthn.createEncodedWebAuthnAttestationObject
+import com.infomaniak.multiplatform_authenticator.core.internal.webauthn.createEncodedWebAuthnAttestationObject
 import okio.Buffer
 import kotlin.test.Test
 import kotlin.test.assertEquals

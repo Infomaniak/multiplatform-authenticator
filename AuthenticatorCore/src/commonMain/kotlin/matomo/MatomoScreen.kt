@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.infomaniak.auth.lib.matomo
+package com.infomaniak.multiplatform_authenticator.core.matomo
 
 enum class MatomoScreen(val value: String) {
     MigrationScreen("Migration"),

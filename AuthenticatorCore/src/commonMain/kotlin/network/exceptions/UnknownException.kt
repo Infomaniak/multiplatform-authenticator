@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.infomaniak.auth.lib.network.exceptions
+package com.infomaniak.multiplatform_authenticator.core.network.exceptions
 
 /**
  * Represents an unknown exception that can occur during the execution of the application.

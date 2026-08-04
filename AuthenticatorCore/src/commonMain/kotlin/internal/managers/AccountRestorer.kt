@@ -15,14 +15,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.infomaniak.auth.lib.internal.managers
+package com.infomaniak.multiplatform_authenticator.core.internal.managers
 
-import com.infomaniak.auth.lib.internal.KeyPairManager.MatchOn
-import com.infomaniak.auth.lib.internal.db.AccountEntity
-import com.infomaniak.auth.lib.internal.db.AccountsDatabase
-import com.infomaniak.auth.lib.internal.extensions.firstOrElse
-import com.infomaniak.auth.lib.internal.requests.WebAuthnRequests
-import com.infomaniak.auth.lib.models.migration.SharedApiToken
+import com.infomaniak.multiplatform_authenticator.core.internal.KeyPairManager.MatchOn
+import com.infomaniak.multiplatform_authenticator.core.internal.db.AccountEntity
+import com.infomaniak.multiplatform_authenticator.core.internal.db.AccountsDatabase
+import com.infomaniak.multiplatform_authenticator.core.internal.extensions.firstOrElse
+import com.infomaniak.multiplatform_authenticator.core.internal.requests.WebAuthnRequests
+import com.infomaniak.multiplatform_authenticator.core.models.migration.SharedApiToken
 
 internal class AccountRestorer(
     accountsDatabase: AccountsDatabase,

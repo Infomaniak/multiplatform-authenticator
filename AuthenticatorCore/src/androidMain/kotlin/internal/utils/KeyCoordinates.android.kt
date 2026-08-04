@@ -15,10 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.infomaniak.auth.lib.internal.utils
+package com.infomaniak.multiplatform_authenticator.core.internal.utils
 
-import com.infomaniak.auth.lib.internal.extensions.trimOrPadStart
-import com.infomaniak.auth.lib.internal.webauthn.PublicKeyXY
+import com.infomaniak.multiplatform_authenticator.core.internal.extensions.trimOrPadStart
+import com.infomaniak.multiplatform_authenticator.core.internal.webauthn.PublicKeyXY
 import java.security.KeyFactory
 import java.security.PublicKey
 import java.security.interfaces.ECPublicKey

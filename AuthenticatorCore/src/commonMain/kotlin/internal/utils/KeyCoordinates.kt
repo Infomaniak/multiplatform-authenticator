@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.infomaniak.auth.lib.internal.utils
+package com.infomaniak.multiplatform_authenticator.core.internal.utils
 
-import com.infomaniak.auth.lib.internal.webauthn.PublicKeyXY
+import com.infomaniak.multiplatform_authenticator.core.internal.webauthn.PublicKeyXY
 
 internal expect fun getKeyCoordinates(key: ByteArray): PublicKeyXY
 

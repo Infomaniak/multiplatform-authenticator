@@ -17,7 +17,7 @@
  */
 @file:OptIn(ExperimentalAtomicApi::class)
 
-package com.infomaniak.auth.lib.logging
+package com.infomaniak.multiplatform_authenticator.core.logging
 
 import kotlin.concurrent.atomics.AtomicLong
 import kotlin.concurrent.atomics.ExperimentalAtomicApi

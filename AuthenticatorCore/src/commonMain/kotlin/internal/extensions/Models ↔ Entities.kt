@@ -15,12 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.infomaniak.auth.lib.internal.extensions
+package com.infomaniak.multiplatform_authenticator.core.internal.extensions
 
-import com.infomaniak.auth.lib.Account
-import com.infomaniak.auth.lib.internal.db.AccountEntity
-import com.infomaniak.auth.lib.internal.models.LegacyUser
-import com.infomaniak.auth.lib.models.migration.user.SharedUserProfile
+import com.infomaniak.multiplatform_authenticator.core.Account
+import com.infomaniak.multiplatform_authenticator.core.internal.db.AccountEntity
+import com.infomaniak.multiplatform_authenticator.core.internal.models.LegacyUser
+import com.infomaniak.multiplatform_authenticator.core.models.migration.user.SharedUserProfile
 
 internal fun AccountEntity.toAccount(status: Account.Status): Account {
     return Account(

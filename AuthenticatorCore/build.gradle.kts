@@ -39,7 +39,7 @@ val javaVersion = providers.gradleProperty("javaVersion").get()
 kotlin {
     @Suppress("UnstableApiUsage")
     androidLibrary {
-        namespace = "com.infomaniak.auth.multiplatform"
+        namespace = "com.infomaniak.multiplatform_authenticator.core"
         compileSdk = androidCompileSdk
         minSdk = androidMinSdk
 

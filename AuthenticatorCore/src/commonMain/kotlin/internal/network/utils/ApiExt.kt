@@ -15,11 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.infomaniak.auth.lib.internal.network.utils
+package com.infomaniak.multiplatform_authenticator.core.internal.network.utils
 
-import com.infomaniak.auth.lib.network.exceptions.ApiException
-import com.infomaniak.auth.lib.network.exceptions.NetworkException
-import com.infomaniak.auth.lib.network.exceptions.UnknownException
+import com.infomaniak.multiplatform_authenticator.core.network.exceptions.ApiException
+import com.infomaniak.multiplatform_authenticator.core.network.exceptions.NetworkException
+import com.infomaniak.multiplatform_authenticator.core.network.exceptions.UnknownException
 import io.ktor.client.call.body
 import io.ktor.client.statement.HttpResponse
 import io.ktor.utils.io.CancellationException

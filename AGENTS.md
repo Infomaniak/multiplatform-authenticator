@@ -20,7 +20,7 @@ logic and the migration models exchanged between platforms.
 
 ## High-Level Tech Stack
 
-- **Kotlin Multiplatform** with targets: `androidLibrary` (namespace `com.infomaniak.auth.multiplatform`), `iosArm64`,
+- **Kotlin Multiplatform** with targets: `androidLibrary` (namespace `com.infomaniak.multiplatform_authenticator`), `iosArm64`,
   `iosSimulatorArm64`, `macosArm64`.
 - **SKIE** for idiomatic Swift interop (default arguments, sealed classes, suspend functions).
 - **Ktor client** for HTTP (engines: OkHttp on Android, Darwin on Apple).

@@ -17,9 +17,9 @@
  */
 @file:OptIn(ExperimentalForeignApi::class)
 
-package com.infomaniak.auth.lib.internal.utils
+package com.infomaniak.multiplatform_authenticator.core.internal.utils
 
-import com.infomaniak.auth.lib.internal.webauthn.DeviceInfo
+import com.infomaniak.multiplatform_authenticator.core.internal.webauthn.DeviceInfo
 import kotlinx.cinterop.ByteVar
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.alloc

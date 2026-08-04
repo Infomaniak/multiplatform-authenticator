@@ -15,16 +15,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.infomaniak.auth.lib.internal.requests
+package com.infomaniak.multiplatform_authenticator.core.internal.requests
 
-import com.infomaniak.auth.lib.internal.db.AccountsDao
-import com.infomaniak.auth.lib.internal.models.SuccessfulApiResponse
-import com.infomaniak.auth.lib.internal.network.ApiRoutes
-import com.infomaniak.auth.lib.internal.network.utils.decode
-import com.infomaniak.auth.lib.internal.utils.dynamicLazyMap
-import com.infomaniak.auth.lib.models.migration.SharedApiToken
-import com.infomaniak.auth.lib.models.migration.user.SharedUserProfile
-import com.infomaniak.auth.lib.network.exceptions.ApiException
+import com.infomaniak.multiplatform_authenticator.core.internal.db.AccountsDao
+import com.infomaniak.multiplatform_authenticator.core.internal.models.SuccessfulApiResponse
+import com.infomaniak.multiplatform_authenticator.core.internal.network.ApiRoutes
+import com.infomaniak.multiplatform_authenticator.core.internal.network.utils.decode
+import com.infomaniak.multiplatform_authenticator.core.internal.utils.dynamicLazyMap
+import com.infomaniak.multiplatform_authenticator.core.models.migration.SharedApiToken
+import com.infomaniak.multiplatform_authenticator.core.models.migration.user.SharedUserProfile
+import com.infomaniak.multiplatform_authenticator.core.network.exceptions.ApiException
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.plugins.auth.Auth

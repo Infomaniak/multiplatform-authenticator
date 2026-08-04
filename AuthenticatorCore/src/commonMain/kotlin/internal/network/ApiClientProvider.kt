@@ -15,16 +15,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.infomaniak.auth.lib.internal.network
+package com.infomaniak.multiplatform_authenticator.core.internal.network
 
-import com.infomaniak.auth.lib.internal.models.ApiResponseForError
-import com.infomaniak.auth.lib.internal.network.utils.getHttpClientEngine
-import com.infomaniak.auth.lib.internal.network.utils.getRequestContextId
-import com.infomaniak.auth.lib.network.exceptions.ApiException
-import com.infomaniak.auth.lib.network.exceptions.NetworkException
-import com.infomaniak.auth.lib.network.interfaces.BreadcrumbType
-import com.infomaniak.auth.lib.network.interfaces.CrashReportInterface
-import com.infomaniak.auth.lib.network.interfaces.CrashReportLevel
+import com.infomaniak.multiplatform_authenticator.core.internal.models.ApiResponseForError
+import com.infomaniak.multiplatform_authenticator.core.internal.network.utils.getHttpClientEngine
+import com.infomaniak.multiplatform_authenticator.core.internal.network.utils.getRequestContextId
+import com.infomaniak.multiplatform_authenticator.core.network.exceptions.ApiException
+import com.infomaniak.multiplatform_authenticator.core.network.exceptions.NetworkException
+import com.infomaniak.multiplatform_authenticator.core.network.interfaces.BreadcrumbType
+import com.infomaniak.multiplatform_authenticator.core.network.interfaces.CrashReportInterface
+import com.infomaniak.multiplatform_authenticator.core.network.interfaces.CrashReportLevel
 import io.ktor.client.HttpClient
 import io.ktor.client.HttpClientConfig
 import io.ktor.client.plugins.HttpRequestRetry

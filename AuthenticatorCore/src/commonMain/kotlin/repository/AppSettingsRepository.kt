@@ -15,11 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.infomaniak.auth.lib.repository
+package com.infomaniak.multiplatform_authenticator.core.repository
 
-import com.infomaniak.auth.lib.room.appsettings.AppSettingsDatabase
-import com.infomaniak.auth.lib.room.appsettings.AppSettingsEntity
-import com.infomaniak.auth.lib.room.appsettings.Theme
+import com.infomaniak.multiplatform_authenticator.core.room.appsettings.AppSettingsDatabase
+import com.infomaniak.multiplatform_authenticator.core.room.appsettings.AppSettingsEntity
+import com.infomaniak.multiplatform_authenticator.core.room.appsettings.Theme
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
