@@ -24,7 +24,7 @@ gradlePlugin {
     plugins {
         register("infomaniak.publishPlugin") {
             id = "infomaniak.publishPlugin"
-            implementationClass = "com.infomaniak.auth.buildlogic.publish.PublishPlugin"
+            implementationClass = "com.infomaniak.multiplatform_authenticator.buildlogic.publish.PublishPlugin"
         }
     }
 }

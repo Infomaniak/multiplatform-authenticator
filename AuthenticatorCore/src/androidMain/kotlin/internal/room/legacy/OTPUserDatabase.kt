@@ -15,13 +15,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.infomaniak.auth.lib.internal.room.legacy
+package com.infomaniak.multiplatform_authenticator.core.internal.room.legacy
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.infomaniak.auth.lib.internal.models.LegacyUser
+import com.infomaniak.multiplatform_authenticator.core.internal.models.LegacyUser
 import splitties.init.appCtx
 
 @Database(entities = [LegacyUser::class], version = 1)

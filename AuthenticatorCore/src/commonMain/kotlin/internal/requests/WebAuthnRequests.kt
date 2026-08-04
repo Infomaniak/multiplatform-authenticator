@@ -15,20 +15,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.infomaniak.auth.lib.internal.requests
+package com.infomaniak.multiplatform_authenticator.core.internal.requests
 
-import com.infomaniak.auth.lib.internal.models.AuthResult
-import com.infomaniak.auth.lib.internal.models.AuthenticationOptions
-import com.infomaniak.auth.lib.internal.models.MigrationOptions
-import com.infomaniak.auth.lib.internal.models.OtpPayload
-import com.infomaniak.auth.lib.internal.models.PasskeysOptions
-import com.infomaniak.auth.lib.internal.models.RegisterPasskey
-import com.infomaniak.auth.lib.internal.models.SuccessfulApiResponse
-import com.infomaniak.auth.lib.internal.models.VerifyAuthenticationData
-import com.infomaniak.auth.lib.internal.network.ApiRoutes
-import com.infomaniak.auth.lib.internal.network.utils.decode
-import com.infomaniak.auth.lib.models.migration.user.SharedUserProfile
-import com.infomaniak.auth.lib.network.exceptions.ApiException
+import com.infomaniak.multiplatform_authenticator.core.internal.models.AuthResult
+import com.infomaniak.multiplatform_authenticator.core.internal.models.AuthenticationOptions
+import com.infomaniak.multiplatform_authenticator.core.internal.models.MigrationOptions
+import com.infomaniak.multiplatform_authenticator.core.internal.models.OtpPayload
+import com.infomaniak.multiplatform_authenticator.core.internal.models.PasskeysOptions
+import com.infomaniak.multiplatform_authenticator.core.internal.models.RegisterPasskey
+import com.infomaniak.multiplatform_authenticator.core.internal.models.SuccessfulApiResponse
+import com.infomaniak.multiplatform_authenticator.core.internal.models.VerifyAuthenticationData
+import com.infomaniak.multiplatform_authenticator.core.internal.network.ApiRoutes
+import com.infomaniak.multiplatform_authenticator.core.internal.network.utils.decode
+import com.infomaniak.multiplatform_authenticator.core.models.migration.user.SharedUserProfile
+import com.infomaniak.multiplatform_authenticator.core.network.exceptions.ApiException
 import io.ktor.client.HttpClient
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.delete

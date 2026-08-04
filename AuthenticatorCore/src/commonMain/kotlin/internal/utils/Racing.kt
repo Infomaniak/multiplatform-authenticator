@@ -17,7 +17,7 @@
  */
 @file:Suppress("NOTHING_TO_INLINE")
 
-package com.infomaniak.auth.lib.internal.utils
+package com.infomaniak.multiplatform_authenticator.core.internal.utils
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job

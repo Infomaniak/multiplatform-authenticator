@@ -17,14 +17,14 @@
  */
 @file:OptIn(InternalAPI::class) //TODO: Replace this once https://youtrack.jetbrains.com/issue/KT-85032 is resolved.
 
-package com.infomaniak.auth.lib.internal.utils
+package com.infomaniak.multiplatform_authenticator.core.internal.utils
 
 import androidx.collection.ScatterMap
 import androidx.collection.mutableObjectIntMapOf
 import androidx.collection.mutableObjectListOf
 import androidx.collection.mutableScatterMapOf
-import com.infomaniak.auth.lib.internal.extensions.hasFlag
-import com.infomaniak.auth.lib.internal.extensions.withFlag
+import com.infomaniak.multiplatform_authenticator.core.internal.extensions.hasFlag
+import com.infomaniak.multiplatform_authenticator.core.internal.extensions.withFlag
 import io.ktor.utils.io.InternalAPI
 import io.ktor.utils.io.locks.ReentrantLock
 import io.ktor.utils.io.locks.reentrantLock

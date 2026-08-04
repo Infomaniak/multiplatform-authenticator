@@ -15,10 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.infomaniak.auth.lib.network.interfaces
+package com.infomaniak.multiplatform_authenticator.core.network.interfaces
 
-import com.infomaniak.auth.lib.models.migration.SharedApiToken
-import com.infomaniak.auth.lib.models.migration.user.SharedUserProfile
+import com.infomaniak.multiplatform_authenticator.core.models.migration.SharedApiToken
+import com.infomaniak.multiplatform_authenticator.core.models.migration.user.SharedUserProfile
 
 interface AuthenticatorBridge {
     suspend fun getTokenFromCrossAppLogin(userId: Long): SharedApiToken?

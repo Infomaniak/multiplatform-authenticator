@@ -16,10 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.infomaniak.auth.lib
+package com.infomaniak.multiplatform_authenticator.core
 
-import com.infomaniak.auth.lib.internal.webauthn.PublicKeyXY
-import com.infomaniak.auth.lib.internal.webauthn.keyCoseOf
+import com.infomaniak.multiplatform_authenticator.core.internal.webauthn.PublicKeyXY
+import com.infomaniak.multiplatform_authenticator.core.internal.webauthn.keyCoseOf
 import okio.Buffer
 import kotlin.test.Test
 import kotlin.test.assertEquals

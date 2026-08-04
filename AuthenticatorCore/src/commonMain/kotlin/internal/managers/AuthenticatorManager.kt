@@ -15,25 +15,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.infomaniak.auth.lib.internal.managers
+package com.infomaniak.multiplatform_authenticator.core.internal.managers
 
-import com.infomaniak.auth.lib.internal.CryptoObjectsBuilder
-import com.infomaniak.auth.lib.internal.Failure
-import com.infomaniak.auth.lib.internal.KeyPairManager
-import com.infomaniak.auth.lib.internal.KeyPairManager.MatchOn
-import com.infomaniak.auth.lib.internal.extensions.firstOrElse
-import com.infomaniak.auth.lib.internal.models.ClientExtensionResults
-import com.infomaniak.auth.lib.internal.models.VerifyAuthenticationData
-import com.infomaniak.auth.lib.internal.models.VerifyResponse
-import com.infomaniak.auth.lib.internal.otp.deleteLegacyAccount
-import com.infomaniak.auth.lib.internal.otp.deleteLegacyDB
-import com.infomaniak.auth.lib.internal.otp.getLegacyAccounts
-import com.infomaniak.auth.lib.internal.otp.needMigration
-import com.infomaniak.auth.lib.internal.repositories.AccountsRepository
-import com.infomaniak.auth.lib.internal.requests.WebAuthnRequests
-import com.infomaniak.auth.lib.internal.utils.SignUtils
-import com.infomaniak.auth.lib.internal.utils.Xor
-import com.infomaniak.auth.lib.models.migration.SharedApiToken
+import com.infomaniak.multiplatform_authenticator.core.internal.CryptoObjectsBuilder
+import com.infomaniak.multiplatform_authenticator.core.internal.Failure
+import com.infomaniak.multiplatform_authenticator.core.internal.KeyPairManager
+import com.infomaniak.multiplatform_authenticator.core.internal.KeyPairManager.MatchOn
+import com.infomaniak.multiplatform_authenticator.core.internal.extensions.firstOrElse
+import com.infomaniak.multiplatform_authenticator.core.internal.models.ClientExtensionResults
+import com.infomaniak.multiplatform_authenticator.core.internal.models.VerifyAuthenticationData
+import com.infomaniak.multiplatform_authenticator.core.internal.models.VerifyResponse
+import com.infomaniak.multiplatform_authenticator.core.internal.otp.deleteLegacyAccount
+import com.infomaniak.multiplatform_authenticator.core.internal.otp.deleteLegacyDB
+import com.infomaniak.multiplatform_authenticator.core.internal.otp.getLegacyAccounts
+import com.infomaniak.multiplatform_authenticator.core.internal.otp.needMigration
+import com.infomaniak.multiplatform_authenticator.core.internal.repositories.AccountsRepository
+import com.infomaniak.multiplatform_authenticator.core.internal.requests.WebAuthnRequests
+import com.infomaniak.multiplatform_authenticator.core.internal.utils.SignUtils
+import com.infomaniak.multiplatform_authenticator.core.internal.utils.Xor
+import com.infomaniak.multiplatform_authenticator.core.models.migration.SharedApiToken
 import io.ktor.utils.io.core.toByteArray
 import kotlinx.serialization.json.Json
 import okio.ByteString.Companion.toByteString

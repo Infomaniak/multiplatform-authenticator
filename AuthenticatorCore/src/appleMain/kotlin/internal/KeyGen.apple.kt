@@ -17,14 +17,14 @@
  */
 @file:OptIn(ExperimentalForeignApi::class)
 
-package com.infomaniak.auth.lib.internal
+package com.infomaniak.multiplatform_authenticator.core.internal
 
-import com.infomaniak.auth.lib.internal.extensions.buildCFDictionary
-import com.infomaniak.auth.lib.internal.extensions.firstOrElse
-import com.infomaniak.auth.lib.internal.extensions.set
-import com.infomaniak.auth.lib.internal.extensions.toNsData
-import com.infomaniak.auth.lib.internal.extensions.tryIt
-import com.infomaniak.auth.lib.internal.utils.Xor
+import com.infomaniak.multiplatform_authenticator.core.internal.extensions.buildCFDictionary
+import com.infomaniak.multiplatform_authenticator.core.internal.extensions.firstOrElse
+import com.infomaniak.multiplatform_authenticator.core.internal.extensions.set
+import com.infomaniak.multiplatform_authenticator.core.internal.extensions.toNsData
+import com.infomaniak.multiplatform_authenticator.core.internal.extensions.tryIt
+import com.infomaniak.multiplatform_authenticator.core.internal.utils.Xor
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.CoreFoundation.CFMutableDictionaryRef
 import platform.CoreFoundation.kCFAllocatorDefault

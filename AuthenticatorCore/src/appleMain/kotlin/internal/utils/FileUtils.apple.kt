@@ -15,11 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.infomaniak.auth.lib.internal.utils
+package com.infomaniak.multiplatform_authenticator.core.internal.utils
 
-import com.infomaniak.auth.lib.internal.extensions.firstOrElse
-import com.infomaniak.auth.lib.internal.extensions.toNsData
-import com.infomaniak.auth.lib.internal.extensions.tryIt2
+import com.infomaniak.multiplatform_authenticator.core.internal.extensions.firstOrElse
+import com.infomaniak.multiplatform_authenticator.core.internal.extensions.toNsData
+import com.infomaniak.multiplatform_authenticator.core.internal.extensions.tryIt2
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.Foundation.NSApplicationSupportDirectory
 import platform.Foundation.NSFileManager

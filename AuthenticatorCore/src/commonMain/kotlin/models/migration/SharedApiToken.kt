@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.infomaniak.auth.lib.models.migration
+package com.infomaniak.multiplatform_authenticator.core.models.migration
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

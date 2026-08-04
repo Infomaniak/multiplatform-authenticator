@@ -15,10 +15,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.infomaniak.auth.lib.internal.repositories
+package com.infomaniak.multiplatform_authenticator.core.internal.repositories
 
-import com.infomaniak.auth.lib.internal.db.AccountEntity
-import com.infomaniak.auth.lib.internal.db.AccountsDatabase
+import com.infomaniak.multiplatform_authenticator.core.internal.db.AccountEntity
+import com.infomaniak.multiplatform_authenticator.core.internal.db.AccountsDatabase
 
 internal class AccountsRepository(database: AccountsDatabase) {
     private val dao = database.getDao()

@@ -15,11 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.infomaniak.auth.lib.internal.extensions
+package com.infomaniak.multiplatform_authenticator.core.internal.extensions
 
-import com.infomaniak.auth.lib.internal.utils.Xor
-import com.infomaniak.auth.lib.internal.utils.Xor.First
-import com.infomaniak.auth.lib.internal.utils.Xor.Second
+import com.infomaniak.multiplatform_authenticator.core.internal.utils.Xor
+import com.infomaniak.multiplatform_authenticator.core.internal.utils.Xor.First
+import com.infomaniak.multiplatform_authenticator.core.internal.utils.Xor.Second
 
 internal inline fun <FirstT, SecondT> Xor<FirstT, SecondT>.firstOrElse(block: (SecondT) -> FirstT): FirstT = when (this) {
     is First -> value

@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.infomaniak.auth.lib.internal
+package com.infomaniak.multiplatform_authenticator.core.internal
 
 internal sealed interface KeyAccessGuard {
 

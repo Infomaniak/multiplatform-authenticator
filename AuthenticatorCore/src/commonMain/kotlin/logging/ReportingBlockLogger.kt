@@ -15,11 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.infomaniak.auth.lib.logging
+package com.infomaniak.multiplatform_authenticator.core.logging
 
-import com.infomaniak.auth.lib.network.interfaces.BreadcrumbType
-import com.infomaniak.auth.lib.network.interfaces.CrashReportInterface
-import com.infomaniak.auth.lib.network.interfaces.CrashReportLevel
+import com.infomaniak.multiplatform_authenticator.core.network.interfaces.BreadcrumbType
+import com.infomaniak.multiplatform_authenticator.core.network.interfaces.CrashReportInterface
+import com.infomaniak.multiplatform_authenticator.core.network.interfaces.CrashReportLevel
 import kotlin.coroutines.cancellation.CancellationException
 
 fun BlockLogger.Companion.breadcrumbsLogger(

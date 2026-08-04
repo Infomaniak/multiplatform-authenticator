@@ -15,15 +15,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.infomaniak.auth.lib
+package com.infomaniak.multiplatform_authenticator.core
 
-import com.infomaniak.auth.lib.internal.CryptoObjectsBuilder
-import com.infomaniak.auth.lib.internal.KeyPairManager
-import com.infomaniak.auth.lib.internal.models.PasskeysOptions
-import com.infomaniak.auth.lib.internal.models.PubKeyCredParam
-import com.infomaniak.auth.lib.internal.models.RelyingParty
-import com.infomaniak.auth.lib.internal.models.User
-import com.infomaniak.auth.lib.internal.webauthn.KeyAlgorithm
+import com.infomaniak.multiplatform_authenticator.core.internal.CryptoObjectsBuilder
+import com.infomaniak.multiplatform_authenticator.core.internal.KeyPairManager
+import com.infomaniak.multiplatform_authenticator.core.internal.models.PasskeysOptions
+import com.infomaniak.multiplatform_authenticator.core.internal.models.PubKeyCredParam
+import com.infomaniak.multiplatform_authenticator.core.internal.models.RelyingParty
+import com.infomaniak.multiplatform_authenticator.core.internal.models.User
+import com.infomaniak.multiplatform_authenticator.core.internal.webauthn.KeyAlgorithm
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlin.test.Test

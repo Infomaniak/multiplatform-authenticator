@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.infomaniak.auth.lib.models.migration.user.preferences
+package com.infomaniak.multiplatform_authenticator.core.models.migration.user.preferences
 
 import androidx.room.ColumnInfo
 import kotlinx.serialization.SerialName

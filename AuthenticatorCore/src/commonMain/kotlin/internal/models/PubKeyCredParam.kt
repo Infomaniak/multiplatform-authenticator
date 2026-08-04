@@ -15,9 +15,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.infomaniak.auth.lib.internal.models
+package com.infomaniak.multiplatform_authenticator.core.internal.models
 
-import com.infomaniak.auth.lib.internal.webauthn.KeyAlgorithm
+import com.infomaniak.multiplatform_authenticator.core.internal.webauthn.KeyAlgorithm
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

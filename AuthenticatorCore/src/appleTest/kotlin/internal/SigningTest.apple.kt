@@ -17,12 +17,12 @@
  */
 @file:OptIn(ExperimentalForeignApi::class)
 
-package com.infomaniak.auth.lib.internal
+package com.infomaniak.multiplatform_authenticator.core.internal
 
-import com.infomaniak.auth.lib.internal.extensions.firstOrElse
-import com.infomaniak.auth.lib.internal.extensions.toByteArray
-import com.infomaniak.auth.lib.internal.extensions.toNSData
-import com.infomaniak.auth.lib.internal.extensions.tryIt
+import com.infomaniak.multiplatform_authenticator.core.internal.extensions.firstOrElse
+import com.infomaniak.multiplatform_authenticator.core.internal.extensions.toByteArray
+import com.infomaniak.multiplatform_authenticator.core.internal.extensions.toNSData
+import com.infomaniak.multiplatform_authenticator.core.internal.extensions.tryIt
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.Security.SecKeyCopyExternalRepresentation
 import platform.Security.SecKeyCopyPublicKey

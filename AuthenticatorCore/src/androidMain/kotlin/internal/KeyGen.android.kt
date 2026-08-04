@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.infomaniak.auth.lib.internal
+package com.infomaniak.multiplatform_authenticator.core.internal
 
 import android.content.pm.PackageManager
 import android.os.Build.VERSION.SDK_INT

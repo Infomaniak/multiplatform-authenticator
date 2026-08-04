@@ -15,22 +15,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.infomaniak.auth.lib
+package com.infomaniak.multiplatform_authenticator.core
 
-import com.infomaniak.auth.lib.internal.AuthenticatorFacadeImpl
-import com.infomaniak.auth.lib.internal.db.AccountEntity
-import com.infomaniak.auth.lib.internal.db.getAccountsRoomDatabase
-import com.infomaniak.auth.lib.internal.extensions.firstOrElse
-import com.infomaniak.auth.lib.internal.managers.AuthenticatorManager
-import com.infomaniak.auth.lib.internal.managers.MigrationManager
-import com.infomaniak.auth.lib.internal.network.ApiClientProvider
-import com.infomaniak.auth.lib.internal.network.ApiRoutes
-import com.infomaniak.auth.lib.internal.repositories.AccountsRepository
-import com.infomaniak.auth.lib.internal.requests.AuthenticatorRequests
-import com.infomaniak.auth.lib.internal.requests.WebAuthnRequests
-import com.infomaniak.auth.lib.models.migration.user.SharedUserProfile
-import com.infomaniak.auth.lib.network.interfaces.AuthenticatorBridge
-import com.infomaniak.auth.lib.network.interfaces.CrashReportInterface
+import com.infomaniak.multiplatform_authenticator.core.internal.AuthenticatorFacadeImpl
+import com.infomaniak.multiplatform_authenticator.core.internal.db.AccountEntity
+import com.infomaniak.multiplatform_authenticator.core.internal.db.getAccountsRoomDatabase
+import com.infomaniak.multiplatform_authenticator.core.internal.extensions.firstOrElse
+import com.infomaniak.multiplatform_authenticator.core.internal.managers.AuthenticatorManager
+import com.infomaniak.multiplatform_authenticator.core.internal.managers.MigrationManager
+import com.infomaniak.multiplatform_authenticator.core.internal.network.ApiClientProvider
+import com.infomaniak.multiplatform_authenticator.core.internal.network.ApiRoutes
+import com.infomaniak.multiplatform_authenticator.core.internal.repositories.AccountsRepository
+import com.infomaniak.multiplatform_authenticator.core.internal.requests.AuthenticatorRequests
+import com.infomaniak.multiplatform_authenticator.core.internal.requests.WebAuthnRequests
+import com.infomaniak.multiplatform_authenticator.core.models.migration.user.SharedUserProfile
+import com.infomaniak.multiplatform_authenticator.core.network.interfaces.AuthenticatorBridge
+import com.infomaniak.multiplatform_authenticator.core.network.interfaces.CrashReportInterface
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

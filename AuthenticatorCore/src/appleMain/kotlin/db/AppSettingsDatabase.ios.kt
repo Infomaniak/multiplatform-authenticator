@@ -15,12 +15,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.infomaniak.auth.lib.db
+package com.infomaniak.multiplatform_authenticator.core.db
 
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.infomaniak.auth.lib.room.appsettings.AppSettingsDatabase
-import com.infomaniak.auth.lib.room.appsettings.getAppSettingsRoomDatabase
+import com.infomaniak.multiplatform_authenticator.core.room.appsettings.AppSettingsDatabase
+import com.infomaniak.multiplatform_authenticator.core.room.appsettings.getAppSettingsRoomDatabase
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.Foundation.NSDocumentDirectory
 import platform.Foundation.NSFileManager

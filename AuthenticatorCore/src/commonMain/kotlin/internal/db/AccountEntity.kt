@@ -15,11 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.infomaniak.auth.lib.internal.db
+package com.infomaniak.multiplatform_authenticator.core.internal.db
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.infomaniak.auth.lib.AuthenticatorFacade
+import com.infomaniak.multiplatform_authenticator.core.AuthenticatorFacade
 
 @Entity
 internal data class AccountEntity(
