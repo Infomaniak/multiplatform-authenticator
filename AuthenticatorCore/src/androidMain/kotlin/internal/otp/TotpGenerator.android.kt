@@ -34,6 +34,7 @@ internal actual suspend fun deleteLegacyAccount(userId: String) {
 }
 
 internal actual suspend fun deleteLegacyDB() {
+    OTPUserDatabase.instance.close()
     withContext(Dispatchers.IO) {
         appCtx.getDatabasePath("Infomaniak.db").delete()
     }
