@@ -16,14 +16,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import org.gradle.kotlin.dsl.kotlin
 
-plugins {
-    alias(kmpAuthenticator.plugins.kotlin.multiplatform) apply false
-    alias(kmpAuthenticator.plugins.android.kmp.library) apply false
-    alias(kmpAuthenticator.plugins.kotlin.serialization) apply false
-    alias(kmpAuthenticator.plugins.skie) apply false
-    alias(kmpAuthenticator.plugins.androidx.room) apply false
-    alias(kmpAuthenticator.plugins.ksp) apply false
-    kotlin("plugin.parcelize") version kmpAuthenticator.versions.kotlin apply false
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    versionCatalogs {
+        create("kmpAuthenticator") { from(files("../gradle/kmpAuthenticator.versions.toml")) }
+    }
 }
+
+rootProject.name = "build-logic"
+include(":plugins")

@@ -1,16 +1,19 @@
 # AGENTS.md - Authenticator Multiplatform Library
 
-> For the Android app norms, see `app/AGENTS.md`. For Core library norms, see `Core/AGENTS.md`. For the composite build overview,
-> see the root `AGENTS.md`.
+> This is the `multiplatform-authenticator` Git repository, consumed by `android-authenticator` as a Git submodule + Gradle
+> composite build (module path `:multiplatform-authenticator:AuthenticatorCore` from the parent repo, `:AuthenticatorCore` when
+> built standalone from this repo's root). For the Android app norms, see `app/AGENTS.md` and the parent repo's root `AGENTS.md`.
+> For Core library norms, see `Core/AGENTS.md` in the parent repo.
 
 ## Module Summary
 
-`:multiplatform-lib` is the Kotlin Multiplatform module that holds the shared business logic of the Infomaniak Authenticator. It
+`:AuthenticatorCore` is the Kotlin Multiplatform module that holds the shared business logic of the Infomaniak Authenticator. It
 is consumed:
 
-- by the Android app via `implementation(project(":multiplatform-lib"))` (see `app/build.gradle.kts`);
+- by the Android app via the `libs.infomaniak.multiplatform.authenticator.submodule` version-catalog alias (dependency
+  substitution resolves it to `project(":AuthenticatorCore")`, see `app/build.gradle.kts` in the parent repo);
 - by the iOS / macOS Authenticator as a static XCFramework named `CoreAuthenticator`, distributed through the root
-  `Package.swift`.
+  `Package.swift` (in the parent `android-authenticator` repo).
 
 It owns the OTP engine (TOTP/HOTP), the API client, the local Room database, the account/2FA repositories, the WebAuthn / passkey
 logic and the migration models exchanged between platforms.
@@ -23,7 +26,7 @@ logic and the migration models exchanged between platforms.
 - **Ktor client** for HTTP (engines: OkHttp on Android, Darwin on Apple).
 - **kotlinx.serialization** (`json`, `cbor`) - JSON is configured in `internal/network/ApiClientProvider.kt` with
   `coerceInputValues = true`, `ignoreUnknownKeys = true`, and `decodeEnumsCaseInsensitive`.
-- **AndroidX Room** (multiplatform Room with `androidx.sqlite.bundled`) - schemas are exported to `multiplatform-lib/schemas`.
+- **AndroidX Room** (multiplatform Room with `androidx.sqlite.bundled`) - schemas are exported to `AuthenticatorCore/schemas`.
 - **okio** for hashing.
 - **kotlin-base32** (`osmerion-kotlin-base32`) for OTP computation.
 - **Coroutines** (`kotlinx.coroutines.core`, `kotlinx.coroutines.test`).
@@ -32,7 +35,7 @@ logic and the migration models exchanged between platforms.
 ## Context Map
 
 ```
-multiplatform-lib/
+AuthenticatorCore/
 ├── build.gradle.kts            # KMP setup: targets, XCFramework, SKIE, Room
 ├── schemas/                    # Exported Room schemas (commit when DB schema changes)
 └── src/
@@ -116,35 +119,36 @@ multiplatform-lib/
     - Apple Keychain tags: `"$userId-$keyId"` (private) and `"$userId-$keyId.pub"` (public).
       Maintain these conventions when adding key-management code; do not rename existing entries (existing users would lose their
       keys).
-- **Room schemas**: When you change a Room entity, the generated schema under `multiplatform-lib/schemas/` must be committed
+- **Room schemas**: When you change a Room entity, the generated schema under `AuthenticatorCore/schemas/` must be committed
   alongside a migration.
 
-### Commands (run from repo root)
+### Commands (run from this repo's root)
 
 ```bash
-# Initialize Core submodule (required for any Gradle command)
-git submodule update --init --recursive
-
 # Assemble the Android variant of the library
-./gradlew :multiplatform-lib:assemble
+./gradlew :AuthenticatorCore:assemble
 
 # Compile all KMP targets
-./gradlew :multiplatform-lib:build
+./gradlew :AuthenticatorCore:build
 
 # Common (JVM) tests
-./gradlew :multiplatform-lib:commonTest
-./gradlew :multiplatform-lib:androidHostTest
+./gradlew :AuthenticatorCore:commonTest
+./gradlew :AuthenticatorCore:androidHostTest
 
 # All tests (host + simulator)
-./gradlew :multiplatform-lib:allTests
+./gradlew :AuthenticatorCore:allTests
 
 # Apple tests (require macOS host)
-./gradlew :multiplatform-lib:iosSimulatorArm64Test
-./gradlew :multiplatform-lib:macosArm64Test
+./gradlew :AuthenticatorCore:iosSimulatorArm64Test
+./gradlew :AuthenticatorCore:macosArm64Test
 
 # Build the iOS / macOS XCFramework (CoreAuthenticator.xcframework)
-./buildXCFramework
+./gradlew :AuthenticatorCore:assembleCoreAuthenticatorXCFramework
 ```
+
+> Note: when these commands are run from the parent `android-authenticator` repo root instead (composite build), prefix the
+> task path with `:multiplatform-authenticator:`, e.g. `./gradlew :multiplatform-authenticator:AuthenticatorCore:assemble`, or
+> use the top-level `./buildXCFramework` helper script for the XCFramework.
 
 ### Code Style
 
@@ -191,7 +195,7 @@ Add KMP-specific corrections here as they occur.
 ## Self-correction
 
 - **Stale Map**: Update when you encounter new source sets, packages, or expect/actual splits not listed.
-- **Schema drift**: If `./gradlew :multiplatform-lib:build` regenerates files under `schemas/`, commit them as part of the same
-  change.
+- **Schema drift**: If `./gradlew :AuthenticatorCore:build` regenerates files under `AuthenticatorCore/schemas/`, commit them as
+  part of the same change.
 - **Reference Core / app**: When editing code that is bridged into the Android app, cross-check `app/AGENTS.md`; when editing Core
   imports, check `Core/AGENTS.md`.
