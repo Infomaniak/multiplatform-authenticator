@@ -253,16 +253,10 @@ internal class AuthenticatorFacadeImpl(
             }
         }
 
-    private suspend fun shouldTryImmediateLogin(): Boolean = raceOf(
-        {
-            proceedMigration.join()
-            true
-        },
-        {
-            atLeastOneConnectedAccount.first { it }
-            false
-        },
-    ) || proceedMigration.isCompleted // In case it finished after a connected account was added.
+    private suspend fun waitForMigrationStartSignal(): Unit = raceOf(
+        { proceedMigration.join() },
+        { atLeastOneConnectedAccount.first { it } },
+    )
 
     private suspend fun FlowCollector<Account.Status.NotConnected>.registrationAttempts(notRegisteredAccount: AccountEntity) {
         val passKeyAlreadyRegistered = when (val accountStatus = notRegisteredAccount.status) {
@@ -321,13 +315,12 @@ internal class AuthenticatorFacadeImpl(
         require(accountToMigrate.status == Status.ToBeMigrated)
         emit(Account.Status.NotConnected.AttemptingToConnect.ToBeMigrated)
 
-        if (shouldTryImmediateLogin()) {
-            blockLogger.withLog("migrationAttempts.tryCrossAppLogin") {
-                tryCrossAppLogin(accountToMigrate) { return }
-            }
-            blockLogger.withLog("migrationAttempts.tryToMigrateViaOngoingLogin") {
-                tryToMigrateViaOngoingLogin(accountToMigrate) { return }
-            }
+        waitForMigrationStartSignal()
+        blockLogger.withLog("migrationAttempts.tryCrossAppLogin") {
+            tryCrossAppLogin(accountToMigrate) { return }
+        }
+        blockLogger.withLog("migrationAttempts.tryToMigrateViaOngoingLogin") {
+            tryToMigrateViaOngoingLogin(accountToMigrate) { return }
         }
         blockLogger.withLog("migrationAttempts.tryMigratingWithReLogin") {
             tryMigratingWithReLogin(accountToMigrate)
