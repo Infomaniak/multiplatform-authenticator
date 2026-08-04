@@ -23,6 +23,8 @@ import kotlinx.cinterop.BetaInteropApi
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.int
@@ -30,6 +32,8 @@ import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import platform.Foundation.NSData
 import platform.Foundation.NSUserDefaults
+
+private val writeMutex = Mutex()
 
 @OptIn(BetaInteropApi::class, ExperimentalForeignApi::class)
 internal actual suspend fun getLegacyAccounts(): List<LegacyUser> = withContext(Dispatchers.IO) {
@@ -51,10 +55,10 @@ internal actual suspend fun getLegacyAccounts(): List<LegacyUser> = withContext(
 }
 
 @OptIn(ExperimentalForeignApi::class)
-internal actual suspend fun deleteLegacyAccount(userId: String) {
+internal actual suspend fun deleteLegacyAccount(userId: String) = writeMutex.withLock {
     withContext(Dispatchers.IO) {
         val userDefaults = NSUserDefaults.standardUserDefaults
-        val usersData = userDefaults.objectForKey("ALL_USERS") as? MutableList<*> ?: return@withContext false
+        val usersData = userDefaults.objectForKey("ALL_USERS") as? MutableList<*> ?: return@withContext
 
         val updatedList = usersData.mapNotNull { item ->
             val data = item as? NSData ?: return@mapNotNull item
