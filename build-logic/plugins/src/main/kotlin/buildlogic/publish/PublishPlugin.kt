@@ -35,6 +35,7 @@ class PublishPlugin : Plugin<Project> {
     override fun apply(target: Project) = with(target) {
         plugins.apply(SigningPlugin::class.java)
         plugins.apply("maven-publish")
+        plugins.apply("com.gradleup.nmcp")
 
         group = "com.infomaniak.multiplatform_authenticator"
         version = getPropertyValue("core.version") ?: "unspecified"
