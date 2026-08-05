@@ -36,7 +36,6 @@ import com.infomaniak.multiplatform_authenticator.core.network.exceptions.ApiExc
 import com.infomaniak.multiplatform_authenticator.core.network.interfaces.CrashReportInterface
 import com.osmerion.kotlin.io.encoding.Base32
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.io.IOException
 import okio.ByteString.Companion.encodeUtf8
@@ -77,8 +76,6 @@ internal class MigrationManager(
         if (!needMigration()) return
 
         val legacyAccounts = getLegacyAccounts().ifEmpty { return }
-        println("addLegacyAccountsToDB => legacyAccounts $legacyAccounts")
-        println("addLegacyAccountsToDB => accounts in DB = ${accountsDatabase.getDao().getAccountsAsFlow().first()}")
         accountsDatabase.getDao().upsert(legacyAccounts.map { it.toEntity() })
     }
 

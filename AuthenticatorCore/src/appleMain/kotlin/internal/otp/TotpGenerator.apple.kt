@@ -60,25 +60,19 @@ internal actual suspend fun deleteLegacyAccount(userId: String) = writeMutex.wit
         val userDefaults = NSUserDefaults.standardUserDefaults
         val usersData = userDefaults.objectForKey("ALL_USERS") as? List<*> ?: return@withContext
 
-        println("usersData =$usersData")
-
         val updatedList = usersData.mapNotNull { item ->
             val data = item as NSData? ?: return@mapNotNull item
             val jsonString = data.toByteArray().decodeToString()
 
             try {
                 val id = Json.parseToJsonElement(jsonString).jsonObject["id"]?.jsonPrimitive?.int
-                if (id == userId.toInt()) {
-                    println("found user with $id")
-                    null
-                } else item
+                if (id == userId.toInt()) null else item
             } catch (_: Exception) {
                 item
             }
         }
 
         if (updatedList.size < usersData.size) {
-            println("updatedList.size < usersData.size")
             userDefaults.setObject(updatedList, "ALL_USERS")
         }
 
