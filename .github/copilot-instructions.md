@@ -15,7 +15,7 @@ No setup required: no Git submodule, no `env.properties`, no local.properties se
 (`compileSdk`/`minSdk` from `gradle.properties`, currently 36/27).
 
 ## Local Verification (CI: `.github/workflows/`)
-> **CI only** runs commit-message/PR-title linting, Gradle-wrapper validation, and a manual snapshot-publish workflow.
+> **CI only** checks dependent issues, commit messages/PR titles, and Gradle-wrapper validity; snapshot publishing is manual.
 > There is no CI build or test step — the commands below are the only validation available.
 
 Runnable in the Copilot cloud agent (Linux) — Kotlin/Native skips Apple targets on Linux automatically:

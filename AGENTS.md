@@ -12,16 +12,16 @@ is consumed:
 
 - by the Android app via the `libs.infomaniak.multiplatform.authenticator.submodule` version-catalog alias (dependency
   substitution resolves it to `project(":AuthenticatorCore")`, see `app/build.gradle.kts` in the parent repo);
-- by the iOS / macOS Authenticator as a static XCFramework named `CoreAuthenticator`, distributed through the root
-  `Package.swift` (in the parent `android-authenticator` repo).
+- by the iOS / macOS Authenticator as a static XCFramework named `CoreAuthenticator`, distributed through this repo's own root
+  `Package.swift` (its `url` / `checksum` are placeholders overwritten by `.github/workflows/publish-ios-snapshot.yml`).
 
 It owns the OTP engine (TOTP/HOTP), the API client, the local Room database, the account/2FA repositories, the WebAuthn / passkey
 logic and the migration models exchanged between platforms.
 
 ## High-Level Tech Stack
 
-- **Kotlin Multiplatform** with targets: `androidLibrary` (namespace `com.infomaniak.multiplatform_authenticator`), `iosArm64`,
-  `iosSimulatorArm64`, `macosArm64`.
+- **Kotlin Multiplatform** with targets: `androidLibrary` (namespace `com.infomaniak.multiplatform_authenticator.core`),
+  `iosArm64`, `iosSimulatorArm64`, `macosArm64`.
 - **SKIE** for idiomatic Swift interop (default arguments, sealed classes, suspend functions).
 - **Ktor client** for HTTP (engines: OkHttp on Android, Darwin on Apple).
 - **kotlinx.serialization** (`json`, `cbor`) - JSON is configured in `internal/network/ApiClientProvider.kt` with
@@ -131,9 +131,8 @@ AuthenticatorCore/
 # Compile all KMP targets
 ./gradlew :AuthenticatorCore:build
 
-# Common (JVM) tests
-./gradlew :AuthenticatorCore:commonTest
-./gradlew :AuthenticatorCore:androidHostTest
+# JVM unit tests (commonTest + androidHostTest sources, run on the JVM via the android target)
+./gradlew :AuthenticatorCore:testAndroidHostTest
 
 # All tests (host + simulator)
 ./gradlew :AuthenticatorCore:allTests
