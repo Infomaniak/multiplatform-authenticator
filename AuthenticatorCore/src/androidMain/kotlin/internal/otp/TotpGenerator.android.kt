@@ -19,12 +19,24 @@ package com.infomaniak.multiplatform_authenticator.core.internal.otp
 
 import com.infomaniak.multiplatform_authenticator.core.internal.models.LegacyUser
 import com.infomaniak.multiplatform_authenticator.core.internal.room.legacy.OTPUserDatabase
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.currentCoroutineContext
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
 import splitties.init.appCtx
 
 internal actual suspend fun getLegacyAccounts(): List<LegacyUser> {
-    return OTPUserDatabase.instance.otpUserDao().getAllUsers()
+    if (legacyDbExists().not()) return emptyList()
+    val db = OTPUserDatabase.instance
+    return try {
+        db.otpUserDao().getAllUsers()
+    } catch (e: CancellationException) {
+        if (currentCoroutineContext().isActive && db.isOpen.not()) {
+            // Thrown by Room, see this issue: https://issuetracker.google.com/issues/543076356
+            emptyList()
+        } else throw e
+    }
 }
 
 internal actual suspend fun deleteLegacyAccount(userId: String) {
@@ -44,4 +56,6 @@ internal actual suspend fun getSecretFor(userId: Long): String? {
     return getLegacyAccounts().find { it.userId.toLong() == userId }?.secret
 }
 
-internal actual suspend fun needMigration() = withContext(Dispatchers.IO) { appCtx.getDatabasePath("Infomaniak.db").exists() }
+internal actual suspend fun needMigration() = legacyDbExists()
+
+private suspend fun legacyDbExists() = withContext(Dispatchers.IO) { appCtx.getDatabasePath("Infomaniak.db").exists() }
