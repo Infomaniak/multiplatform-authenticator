@@ -17,7 +17,7 @@
  */
 package com.infomaniak.multiplatform_authenticator.core.models.migration.user.preferences
 
-import androidx.room.ColumnInfo
+import androidx.room3.ColumnInfo
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

@@ -17,7 +17,7 @@
  */
 package com.infomaniak.multiplatform_authenticator.core.room.appsettings
 
-import androidx.room.TypeConverter
+import androidx.room3.ColumnTypeConverter
 
 enum class Theme {
     Light,
@@ -27,12 +27,12 @@ enum class Theme {
 
 class ThemeConverter {
 
-    @TypeConverter
+    @ColumnTypeConverter
     fun fromTheme(theme: Theme): String {
         return theme.name
     }
 
-    @TypeConverter
+    @ColumnTypeConverter
     fun toTheme(value: String): Theme {
         return Theme.valueOf(value)
     }

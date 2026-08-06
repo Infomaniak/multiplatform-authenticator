@@ -17,8 +17,8 @@
  */
 package com.infomaniak.multiplatform_authenticator.core.db
 
-import androidx.room.Room
-import androidx.room.RoomDatabase
+import androidx.room3.Room
+import androidx.room3.RoomDatabase
 import com.infomaniak.multiplatform_authenticator.core.room.appsettings.AppSettingsDatabase
 import com.infomaniak.multiplatform_authenticator.core.room.appsettings.getAppSettingsRoomDatabase
 import kotlinx.cinterop.ExperimentalForeignApi

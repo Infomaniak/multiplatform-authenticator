@@ -17,13 +17,13 @@
  */
 package com.infomaniak.multiplatform_authenticator.core.internal.db
 
-import androidx.room.AutoMigration
-import androidx.room.ConstructedBy
-import androidx.room.Database
-import androidx.room.RoomDatabase
-import androidx.room.RoomDatabaseConstructor
-import androidx.room.TypeConverter
-import androidx.room.TypeConverters
+import androidx.room3.AutoMigration
+import androidx.room3.ConstructedBy
+import androidx.room3.Database
+import androidx.room3.RoomDatabase
+import androidx.room3.RoomDatabaseConstructor
+import androidx.room3.ColumnTypeConverter
+import androidx.room3.ColumnTypeConverters
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
@@ -37,7 +37,7 @@ internal expect fun getAccountsRoomDatabase(databaseNameOrPath: String?): Accoun
         AutoMigration(from = 1, to = 2),
     ]
 )
-@TypeConverters(AccountStatusConverter::class)
+@ColumnTypeConverters(AccountStatusConverter::class)
 @ConstructedBy(AccountsDatabaseConstructor::class)
 internal abstract class AccountsDatabase : RoomDatabase() {
     abstract fun getDao(): AccountsDao
@@ -57,9 +57,9 @@ internal fun getAccountsRoomDatabase(builder: RoomDatabase.Builder<AccountsDatab
 
 internal class AccountStatusConverter {
 
-    @TypeConverter
+    @ColumnTypeConverter
     fun fromStatus(status: AccountEntity.Status) = status.ordinal
 
-    @TypeConverter
+    @ColumnTypeConverter
     fun toStatus(ordinal: Int) = AccountEntity.Status.entries[ordinal]
 }

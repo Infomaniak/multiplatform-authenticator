@@ -69,7 +69,7 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(kmpAuthenticator.androidx.room.runtime)
+            api(kmpAuthenticator.androidx.room.runtime)
             implementation(kmpAuthenticator.androidx.sqlite.bundled)
         }
     }
@@ -141,7 +141,7 @@ skie {
     }
 }
 
-room {
+room3 {
     schemaDirectory("$projectDir/schemas")
 }
 

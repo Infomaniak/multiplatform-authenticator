@@ -17,8 +17,8 @@
  */
 package com.infomaniak.multiplatform_authenticator.core.room.appsettings
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room3.Entity
+import androidx.room3.PrimaryKey
 
 @Entity
 data class AppSettingsEntity(

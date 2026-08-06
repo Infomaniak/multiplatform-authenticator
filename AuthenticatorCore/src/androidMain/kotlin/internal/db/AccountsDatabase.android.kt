@@ -17,7 +17,7 @@
  */
 package com.infomaniak.multiplatform_authenticator.core.internal.db
 
-import androidx.room.Room
+import androidx.room3.Room
 import splitties.init.appCtx
 
 internal actual fun getAccountsRoomDatabase(databaseNameOrPath: String?): AccountsDatabase {
