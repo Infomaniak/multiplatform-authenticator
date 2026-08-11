@@ -63,10 +63,21 @@ fun BlockLogger.Companion.breadcrumbsLogger(
             )
         }
 
-        override fun blockThrew(blockIdentity: String, invocationId: Long, throwable: Throwable) {
+        override fun blockThrew(
+            blockIdentity: String,
+            invocationId: Long,
+            throwable: Throwable,
+            isCoroutineScopeActive: Boolean?,
+        ) {
             val isCancellation = throwable is CancellationException
+            val nonIdiomaticCancellation: Boolean = isCancellation && isCoroutineScopeActive == true
+            val whatHappened = when {
+                nonIdiomaticCancellation -> "got cancelled FROM INSIDE"
+                isCancellation -> "got cancelled"
+                else -> "threw"
+            }
             crashReportInterface.addBreadcrumb(
-                message = "↖ $blockIdentity#$invocationId ${if (isCancellation) "got cancelled" else "threw" }",
+                message = "↖ $blockIdentity#$invocationId $whatHappened",
                 category = category,
                 level = CrashReportLevel.INFO,
                 type = BreadcrumbType.Default,
