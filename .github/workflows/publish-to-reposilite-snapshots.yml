@@ -12,6 +12,9 @@ on:
         type: boolean
         default: false
 
+permissions:
+  contents: read
+
 jobs:
   publish:
     uses: Infomaniak/.github/.github/workflows/kmp-publish-reposilite-snapshot.yml@v2

@@ -17,6 +17,10 @@ on:
           - minor
           - patch
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   release:
     uses: Infomaniak/.github/.github/workflows/kmp-release-library.yml@v2
