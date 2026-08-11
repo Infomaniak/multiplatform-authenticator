@@ -40,4 +40,8 @@ class AppSettingsRepository(database: AppSettingsDatabase) {
     suspend fun setTheme(theme: Theme) {
         dao.setTheme(theme)
     }
+
+    suspend fun clear() {
+        dao.save(AppSettingsEntity())
+    }
 }
