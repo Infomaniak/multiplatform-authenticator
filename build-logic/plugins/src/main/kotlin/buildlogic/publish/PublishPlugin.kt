@@ -35,7 +35,6 @@ class PublishPlugin : Plugin<Project> {
     override fun apply(target: Project) = with(target) {
         plugins.apply(SigningPlugin::class.java)
         plugins.apply("maven-publish")
-        plugins.apply("com.gradleup.nmcp")
 
         group = "com.infomaniak.multiplatform_authenticator"
         version = getPropertyValue("core.version") ?: "unspecified"
@@ -74,6 +73,23 @@ class PublishPlugin : Plugin<Project> {
                                     url.set("https://www.infomaniak.com/")
                                 }
                             }
+                        }
+                    }
+                }
+
+                repositories {
+                    maven {
+                        name = "reposilite"
+                        url = uri(
+                            if (version.toString().endsWith("SNAPSHOT")) {
+                                "https://maven.infomaniak.app/snapshots"
+                            } else {
+                                "https://maven.infomaniak.app/releases"
+                            }
+                        )
+                        credentials {
+                            username = getPropertyValue("reposiliteUsername")
+                            password = getPropertyValue("reposilitePassword")
                         }
                     }
                 }

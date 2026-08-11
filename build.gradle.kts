@@ -26,22 +26,4 @@ plugins {
     alias(kmpAuthenticator.plugins.androidx.room) apply false
     alias(kmpAuthenticator.plugins.ksp) apply false
     kotlin("plugin.parcelize") version kmpAuthenticator.versions.kotlin apply false
-    alias(kmpAuthenticator.plugins.nmcp.aggregation)
-}
-
-nmcpAggregation {
-    centralPortal {
-        username = getPropertyValue("ossrhUsername")
-        password = getPropertyValue("ossrhPassword")
-        publishingType = "AUTOMATIC"
-    }
-}
-
-dependencies {
-    nmcpAggregation(project(":AuthenticatorCore"))
-}
-
-fun getPropertyValue(propertyName: String): String? {
-    if (project.hasProperty(propertyName)) return project.property(propertyName) as String
-    return System.getenv(propertyName)
 }
