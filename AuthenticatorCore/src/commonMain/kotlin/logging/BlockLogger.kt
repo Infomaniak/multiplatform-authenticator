@@ -19,11 +19,11 @@
 
 package com.infomaniak.multiplatform_authenticator.core.logging
 
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.isActive
 import kotlin.concurrent.atomics.AtomicLong
 import kotlin.concurrent.atomics.ExperimentalAtomicApi
 import kotlin.concurrent.atomics.incrementAndFetch
-import kotlin.coroutines.CoroutineContext
 
 class BlockLogger<BlockIdentity>(
     @PublishedApi internal val callbacks: Callbacks<BlockIdentity>
@@ -33,9 +33,8 @@ class BlockLogger<BlockIdentity>(
         internal val logId = AtomicLong(0)
     }
 
-    inline fun <R> withLog(
+    suspend inline fun <R> withLog(
         blockIdentity: BlockIdentity,
-        coroutineContext: CoroutineContext? = null,
         block: () -> R
     ): R {
         val invocationId = logId.incrementAndFetch()
@@ -48,7 +47,7 @@ class BlockLogger<BlockIdentity>(
             }
         } catch (t: Throwable) {
             returnedOrThrew = true
-            callbacks.blockThrew(blockIdentity, invocationId, t, coroutineContext?.isActive)
+            callbacks.blockThrew(blockIdentity, invocationId, t, currentCoroutineContext().isActive)
             throw t
         } finally {
             if (!returnedOrThrew) callbacks.blockReturnedEarly(blockIdentity, invocationId)
