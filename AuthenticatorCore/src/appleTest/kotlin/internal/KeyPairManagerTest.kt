@@ -20,6 +20,7 @@ package com.infomaniak.multiplatform_authenticator.core.internal
 
 import com.infomaniak.multiplatform_authenticator.core.internal.utils.Xor
 import kotlinx.coroutines.test.runTest
+import platform.Foundation.NSProcessInfo
 import kotlin.test.Test
 import kotlin.test.assertNull
 import kotlin.test.fail
@@ -28,6 +29,12 @@ class KeyPairManagerTest {
 
     @Test
     fun testKeyPairManager() {
+        val env = NSProcessInfo.processInfo.environment
+        if (env["XPC_SERVICES_UNAVAILABLE"] == "1") {
+            // No XPC and no app KeyChain on headless iOS simulators.
+            println("Can't access KeyChain here, skipping test")
+            return
+        }
         val keyPairManager = KeyPairManager()
 
         runTest {
