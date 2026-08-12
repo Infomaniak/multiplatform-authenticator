@@ -6,7 +6,8 @@
 Kotlin Multiplatform **library** (not an app) holding the shared logic of the Infomaniak Authenticator: OTP (TOTP/HOTP)
 engine, API client, local Room database, account/2FA repositories, WebAuthn/passkeys. Single Gradle module
 `:AuthenticatorCore`. Consumed by `android-authenticator` (Git submodule + Gradle composite build) and by iOS/macOS as
-a static `CoreAuthenticator` XCFramework (via the root `Package.swift`). Published to Maven Central via NMCP. Targets:
+a static `CoreAuthenticator` XCFramework (via the root `Package.swift`). Published to our self-hosted Reposilite
+instance (`https://maven.infomaniak.app`, snapshots + releases). Targets:
 `androidLibrary`, `iosArm64`, `iosSimulatorArm64`, `macosArm64`. Key tech: SKIE, Ktor, Room multiplatform,
 kotlinx.serialization, okio, kotlin-base32, coroutines. GPL v3.
 

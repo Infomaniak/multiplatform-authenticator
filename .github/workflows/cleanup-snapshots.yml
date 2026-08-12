@@ -16,6 +16,8 @@ permissions:
 
 jobs:
   cleanup-ios:
+    permissions:
+      contents: write
     uses: Infomaniak/.github/.github/workflows/kmp-cleanup-ios-snapshots.yml@v2
     with:
       max-age-days: ${{ fromJSON(inputs.max-age-days || '15') }}
