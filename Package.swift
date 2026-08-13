@@ -15,8 +15,8 @@ let package = Package(
             name: "CoreAuthenticator",
             // Placeholder URL/checksum: automatically overwritten by the first run of
             // the "Build iOS Snapshot" workflow (see .github/workflows/publish-ios-snapshot.yml).
-            url: "https://github.com/Infomaniak/multiplatform-authenticator/releases/download/0.0.10/CoreAuthenticator.xcframework.zip",
-            checksum: "b8507a71ba8cae02961b30cb9d1f467cbb2d750fe00edf7eda9ab58f7579e385"
+            url: "https://github.com/Infomaniak/multiplatform-authenticator/releases/download/0.0.11/CoreAuthenticator.xcframework.zip",
+            checksum: "72200ecee039510a3af4723bf89066698694257cd2da9dcb14f3b0ec21713492"
         ),
     ]
 )
