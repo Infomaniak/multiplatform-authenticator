@@ -8,7 +8,6 @@ kotlinxSerialization = "1.9.0"
 junitAndroidx = "1.3.0"
 ksp = "2.3.9"
 ktor = "3.5.0"
-nmcp = "1.6.0"
 okio = "3.16.2"
 osmerionkotlinBase32 = "1.0.0"
 room = "2.8.4"
@@ -54,8 +53,6 @@ kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-nmcp = { id = "com.gradleup.nmcp", version.ref = "nmcp" }
-nmcp-aggregation = { id = "com.gradleup.nmcp.aggregation", version.ref = "nmcp" }
 publish = { id = "infomaniak.publishPlugin" }
 skie = { id = "co.touchlab.skie", version.ref = "skie" }
 sonarqube = { id = "org.sonarqube", version.ref = "sonarqube" }

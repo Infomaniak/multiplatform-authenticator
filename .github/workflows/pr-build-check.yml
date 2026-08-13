@@ -1,0 +1,14 @@
+name: PR Build Check
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    uses: Infomaniak/.github/.github/workflows/kmp-pr-build-check.yml@v2
+    with:
+      android-test-task: testAndroidHostTest
