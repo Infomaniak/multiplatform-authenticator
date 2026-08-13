@@ -18,6 +18,7 @@ jobs:
       lib-name: "Authenticator lib"
       spm-line: '.package(url: "https://github.com/Infomaniak/multiplatform-authenticator", from: "{VERSION}")'
       android-line: 'implementation("com.infomaniak.multiplatform_authenticator:AuthenticatorCore:{VERSION}")'
+      maven-group-path: "com/infomaniak/multiplatform_authenticator"
     secrets:
       REPOSILITE_USERNAME: ${{ secrets.REPOSILITE_USERNAME }}
       REPOSILITE_PASSWORD: ${{ secrets.REPOSILITE_PASSWORD }}
