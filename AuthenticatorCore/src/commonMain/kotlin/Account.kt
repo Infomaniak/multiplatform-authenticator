@@ -35,7 +35,7 @@ data class Account(
             val securityScore: Int? = null,
             val passwordChangedAck: (() -> Unit)? = null,
         ) : Status {
-            val isSecured: Boolean get() = securityScore == 5
+            val isSecured: Boolean get() = securityScore != null && securityScore >= 4
         }
 
         sealed interface NotConnected : Status {
