@@ -17,7 +17,6 @@
  */
 
 import co.touchlab.skie.configuration.DefaultArgumentInterop
-import com.android.build.api.dsl.androidLibrary
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 
@@ -38,11 +37,12 @@ val javaVersion = providers.gradleProperty("javaVersion").get()
 
 kotlin {
     @Suppress("UnstableApiUsage")
-    androidLibrary {
+    android {
         namespace = "com.infomaniak.multiplatform_authenticator.core"
         compileSdk = androidCompileSdk
         minSdk = androidMinSdk
 
+        withSourcesJar(publish = true)
         withDeviceTestBuilder {
             sourceSetTreeName = "test"
         }

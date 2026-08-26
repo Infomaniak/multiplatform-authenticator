@@ -96,7 +96,6 @@ internal inline fun <T> RacingScope<T>.launchRacer(noinline block: suspend Corou
  */
 @OptIn(ExperimentalTypeInference::class)
 internal suspend fun <T> race(
-    @BuilderInference
     builder: suspend RacingScope<T>.() -> Unit
 ): T = coroutineScope {
     @Suppress("RemoveExplicitTypeArguments")
