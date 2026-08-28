@@ -504,7 +504,10 @@ internal class AuthenticatorFacadeImpl(
                 return block()
             }.cancellable().onFailure {
                 it.printStackTrace()
-                it.reportIfNeeded(userId, "account connection attempt failed")
+                when (it) {
+                    is NetworkException, is IOException -> Unit
+                    else -> crashReport.capture(userId, "account connection attempt failed", it)
+                }
                 if (it is IllegalStateException || it is IllegalArgumentException) { // Local errors, no recourse.
                     val issue = Issue.NonRetriable(it.message ?: it::class.simpleName ?: "$it")
                     emit(Account.Status.NotConnected.LoginFailed(issue))
