@@ -17,12 +17,13 @@
  */
 package com.infomaniak.multiplatform_authenticator.core.internal
 
+import com.infomaniak.multiplatform_authenticator.core.PasskeysStorageLocation
+import com.infomaniak.multiplatform_authenticator.core.PasskeysStorageLocation.keyFile
 import com.infomaniak.multiplatform_authenticator.core.internal.utils.Xor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.invoke
 import kotlinx.coroutines.withContext
 import kotlinx.io.IOException
-import splitties.init.appCtx
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.attribute.BasicFileAttributes
@@ -31,11 +32,7 @@ internal actual fun createKeyPairManager(): KeyPairManager = KeyPairManagerAndro
 
 private class KeyPairManagerAndroidImpl : KeyPairManager() {
 
-    private val keysDir by lazy {
-        appCtx.filesDir.resolve("passkeys").also { passkeysDir ->
-            passkeysDir.mkdir()
-        }
-    }
+    private val keysDir: File get() = PasskeysStorageLocation.dir
 
     @Throws(Exception::class)
     override suspend fun generateNewKey(userId: Long, keyId: String): Failure.KeyManagement.GenerationFailed? {
@@ -126,9 +123,4 @@ private class KeyPairManagerAndroidImpl : KeyPairManager() {
         startIndex = name.indexOfFirst { it == '-' } + 1,
         endIndex = name.indexOfLast { it == '-' }
     )
-
-    private fun keyFile(userId: Long, keyId: String, isPublic: Boolean): File {
-        val visibility = if (isPublic) "public" else "private"
-        return keysDir.resolve("$userId-$keyId-$visibility.key")
-    }
 }
