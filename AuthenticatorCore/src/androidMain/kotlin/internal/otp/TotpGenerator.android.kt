@@ -25,7 +25,13 @@ import splitties.init.appCtx
 
 internal actual suspend fun getLegacyAccounts(): List<LegacyUser> {
     if (legacyDbExists().not()) return emptyList()
-    return OTPUserDatabase.instance.otpUserDao().getAllUsers()
+    val db = OTPUserDatabase.instance
+    return try {
+        db.otpUserDao().getAllUsers()
+    } catch (e: IllegalStateException) {
+        // Thrown by Room when the DB has been closed
+        emptyList()
+    }
 }
 
 internal actual suspend fun deleteLegacyAccount(userId: String) {
