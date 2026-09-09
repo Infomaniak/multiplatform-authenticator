@@ -17,7 +17,7 @@
  */
 package com.infomaniak.multiplatform_authenticator.core.internal.db
 
-import androidx.room.Room
+import androidx.room3.Room
 import kotlinx.cinterop.ExperimentalForeignApi
 import platform.Foundation.NSDocumentDirectory
 import platform.Foundation.NSFileManager

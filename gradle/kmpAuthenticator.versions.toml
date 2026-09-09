@@ -10,18 +10,17 @@ ksp = "2.3.11"
 ktor = "3.5.2"
 okio = "3.16.2"
 osmerionkotlinBase32 = "1.0.0"
-room = "2.8.4"
+room = "3.0.2"
 skie = "0.10.14"
 sonarqube = "7.3.1.8318"
 sqlite = "2.6.2"
 splitties = "3.0.0"
 
-
 [libraries]
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
 android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }
-androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
-androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+androidx-room-compiler = { module = "androidx.room3:room3-compiler", version.ref = "room" }
+androidx-room-runtime = { module = "androidx.room3:room3-runtime", version.ref = "room" }
 androidx-sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
@@ -48,7 +47,7 @@ androidx-junit = { module = "androidx.test.ext:junit", version.ref = "junitAndro
 
 [plugins]
 android-kmp-library = { id = "com.android.kotlin.multiplatform.library", version.ref = "agp" }
-androidx-room = { id = "androidx.room", version.ref = "room" }
+androidx-room = { id = "androidx.room3", version.ref = "room" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

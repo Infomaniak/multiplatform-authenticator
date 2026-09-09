@@ -19,10 +19,7 @@ package com.infomaniak.multiplatform_authenticator.core.internal.otp
 
 import com.infomaniak.multiplatform_authenticator.core.internal.models.LegacyUser
 import com.infomaniak.multiplatform_authenticator.core.internal.room.legacy.OTPUserDatabase
-import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.currentCoroutineContext
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.withContext
 import splitties.init.appCtx
 
@@ -31,11 +28,9 @@ internal actual suspend fun getLegacyAccounts(): List<LegacyUser> {
     val db = OTPUserDatabase.instance
     return try {
         db.otpUserDao().getAllUsers()
-    } catch (e: CancellationException) {
-        if (currentCoroutineContext().isActive && db.isOpen.not()) {
-            // Thrown by Room, see this issue: https://issuetracker.google.com/issues/543076356
-            emptyList()
-        } else throw e
+    } catch (e: IllegalStateException) {
+        // Thrown by Room when the DB has been closed
+        emptyList()
     }
 }
 

@@ -17,9 +17,9 @@
  */
 package com.infomaniak.multiplatform_authenticator.core.internal.room.legacy
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Query
+import androidx.room3.Dao
+import androidx.room3.Delete
+import androidx.room3.Query
 import com.infomaniak.multiplatform_authenticator.core.internal.models.LegacyUser
 
 @Dao
