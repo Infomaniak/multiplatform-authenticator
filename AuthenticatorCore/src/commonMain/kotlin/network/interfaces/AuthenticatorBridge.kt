@@ -25,4 +25,6 @@ interface AuthenticatorBridge {
     suspend fun getTokenFromDatabase(userId: Long): SharedApiToken?
     suspend fun attemptPersistingTokenForAccount(userId: Long, token: SharedApiToken)
     suspend fun persistUserProfile(userProfile: SharedUserProfile)
+    /** Only needed on Android for the Play Store variant. Used after restoration from an app backup. */
+    suspend fun restorePasskeys() = Unit
 }
