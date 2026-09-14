@@ -21,6 +21,7 @@ import com.infomaniak.multiplatform_authenticator.core.internal.db.AccountsDao
 import com.infomaniak.multiplatform_authenticator.core.internal.models.SuccessfulApiResponse
 import com.infomaniak.multiplatform_authenticator.core.internal.network.ApiRoutes
 import com.infomaniak.multiplatform_authenticator.core.internal.network.utils.decode
+import com.infomaniak.multiplatform_authenticator.core.internal.utils.DynamicLazyMap
 import com.infomaniak.multiplatform_authenticator.core.internal.utils.dynamicLazyMap
 import com.infomaniak.multiplatform_authenticator.core.models.migration.SharedApiToken
 import com.infomaniak.multiplatform_authenticator.core.models.migration.user.SharedUserProfile
@@ -32,6 +33,7 @@ import io.ktor.client.plugins.auth.providers.BearerTokens
 import io.ktor.client.plugins.auth.providers.bearer
 import io.ktor.client.request.get
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.async
@@ -48,7 +50,7 @@ internal class AuthenticatorRequests(
     coroutineScope: CoroutineScope,
 ) {
 
-    private val perUserHttpClient = coroutineScope.dynamicLazyMap(
+    val perUserHttpClient: DynamicLazyMap<Long, Deferred<HttpClient>> = coroutineScope.dynamicLazyMap(
         cacheManager = { userId: Long, _ ->
             accountsDao.getAccountAsFlow(userId).first { it == null }
         }

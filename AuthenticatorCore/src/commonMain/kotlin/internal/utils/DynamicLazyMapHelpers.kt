@@ -47,7 +47,7 @@ internal fun <K, E> DynamicLazyMap.Companion.sharedFlow(
 /**
  * Helper to directly get a [Flow] from a [DynamicLazyMap] containing [SharedFlow]s.
  *
- * @see DynamicLazyMap.Companion.sharedFlow
+ * @see sharedFlow
  */
 internal fun <K, E> DynamicLazyMap<K, SharedFlow<E>>.flowForKey(key: K): Flow<E> = flow {
     useElement(key) { sharedFlow: SharedFlow<E> ->
@@ -94,4 +94,14 @@ internal inline fun <K, reified E, R> DynamicLazyMap<K, SharedFlow<E>>.combineFo
     crossinline transform: suspend (Array<E>) -> R
 ): Flow<R> = flow {
     useElements(keys) { emitAll(combine(it.values, transform)) }
+}
+
+typealias UseElementSuspend<K, E, R> = suspend (K, suspend (E) -> R) -> R
+
+internal fun <K, E, R> DynamicLazyMap<K, E>.asFunction(): UseElementSuspend<K, E, R> {
+    return { key: K, block: suspend (E) -> R ->
+        useElement(key) { element ->
+            block(element)
+        }
+    }
 }
