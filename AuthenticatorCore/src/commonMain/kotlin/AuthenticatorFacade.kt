@@ -98,6 +98,7 @@ abstract class AuthenticatorFacade internal constructor() {
                 accountsDatabase = accountsDatabase,
                 authenticatorManager = authenticatorManager,
                 webAuthnRequests = webAuthnRequests,
+                restorePasskeys = authenticatorBridge::restorePasskeys,
                 clientId = clientId,
             )
             val authenticatorRequests: AuthenticatorRequests by lazy {

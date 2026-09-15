@@ -15,16 +15,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.infomaniak.multiplatform_authenticator.core.network.interfaces
 
-import com.infomaniak.multiplatform_authenticator.core.models.migration.SharedApiToken
-import com.infomaniak.multiplatform_authenticator.core.models.migration.user.SharedUserProfile
+package com.infomaniak.multiplatform_authenticator.core
 
-interface AuthenticatorBridge {
-    suspend fun getTokenFromCrossAppLogin(userId: Long): SharedApiToken?
-    suspend fun getTokenFromDatabase(userId: Long): SharedApiToken?
-    suspend fun attemptPersistingTokenForAccount(userId: Long, token: SharedApiToken)
-    suspend fun persistUserProfile(userProfile: SharedUserProfile)
-    /** Only needed on Android for the Play Store variant. Used after restoration from an app backup. */
-    suspend fun restorePasskeys() = Unit
+import com.infomaniak.multiplatform_authenticator.core.internal.AuthenticatorFacadeImpl
+import com.infomaniak.multiplatform_authenticator.core.internal.utils.asFunction
+import io.ktor.client.HttpClient
+import kotlinx.coroutines.Deferred
+
+fun AuthenticatorFacade.httpClients(): suspend (
+    userId: Long,
+    block: suspend (Deferred<HttpClient>) -> Nothing
+) -> Nothing = when (this) {
+    is AuthenticatorFacadeImpl -> authenticatorRequests.perUserHttpClient.asFunction()
+    else -> error("Unexpected AuthenticatorFacade subclass: ${this::class}")
 }

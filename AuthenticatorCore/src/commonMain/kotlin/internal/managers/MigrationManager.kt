@@ -48,6 +48,7 @@ internal class MigrationManager(
     private val accountsDatabase: AccountsDatabase,
     private val authenticatorManager: AuthenticatorManager,
     private val webAuthnRequests: WebAuthnRequests,
+    private val restorePasskeys: suspend () -> Unit,
     private val clientId: String,
 ) {
 
@@ -55,6 +56,7 @@ internal class MigrationManager(
 
     suspend fun setBackedUpAccountsStatus() {
         RestoreFromBackupDetector.runRestoreOperationIfNeeded {
+            restorePasskeys()
             dao.updateStatus(
                 currentStatus = AccountEntity.Status.LoggedIn,
                 newStatus = AccountEntity.Status.RestoringFromBackup

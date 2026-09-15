@@ -88,7 +88,7 @@ import kotlin.time.Duration.Companion.seconds
 internal class AuthenticatorFacadeImpl(
     accountsDatabase: AccountsDatabase,
     private val clientId: String,
-    private val authenticatorRequests: AuthenticatorRequests,
+    val authenticatorRequests: AuthenticatorRequests,
     private val authenticatorManager: AuthenticatorManager,
     private val migrationManager: MigrationManager,
     private val authenticatorBridge: AuthenticatorBridge,
