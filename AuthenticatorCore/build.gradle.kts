@@ -36,7 +36,6 @@ val androidMinSdk = providers.gradleProperty("androidMinSdk").get().toInt()
 val javaVersion = providers.gradleProperty("javaVersion").get()
 
 kotlin {
-    @Suppress("UnstableApiUsage")
     android {
         namespace = "com.infomaniak.multiplatform_authenticator.core"
         compileSdk = androidCompileSdk
