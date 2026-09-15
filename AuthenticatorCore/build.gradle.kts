@@ -126,6 +126,7 @@ kotlin {
     compilerOptions {
         freeCompilerArgs.add("-Xexpect-actual-classes")
         freeCompilerArgs.add("-Xreturn-value-checker=full")
+        freeCompilerArgs.add("-XXLanguage:+UnnamedLocalVariables")
     }
 }
 
