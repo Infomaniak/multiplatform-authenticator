@@ -105,7 +105,7 @@ private fun KeyAccessGuard.Authenticated.applyTo(builder: KeyGenParameterSpec.Bu
             is KeyAccessGuard.DevicePasscode, is KeyAccessGuard.DevicePasscodeOrNewBiometrics -> {
                 // Before API 30, setting this to a positive value is the only way to allow passcode.
                 val validityDuration = 10.seconds
-                @Suppress("deprecation")
+                @Suppress("Deprecation")
                 builder.setUserAuthenticationValidityDurationSeconds(validityDuration.inWholeSeconds.toInt())
             }
             else -> Unit
