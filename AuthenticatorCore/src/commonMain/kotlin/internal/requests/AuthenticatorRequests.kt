@@ -102,15 +102,10 @@ internal class AuthenticatorRequests(
     private suspend fun refreshTokenOrDisconnectAccount(userId: Long): BearerTokens? = try {
         refreshToken(userId).toBearerTokens()
     } catch (e: ApiException) {
-        if (e.statusCode == 401 || e.isBrokenInvalidPasskeyResponse()) {
+        if (e.statusCode == 401) {
             disconnectAccount(userId)
             null
         } else throw e
-    }
-
-    private fun ApiException.isBrokenInvalidPasskeyResponse(): Boolean {
-        //TODO[Authenticator-DONT-SHIP]: Remove this and its usage before public release.
-        return this is ApiException.ApiErrorException && statusCode == 422 && errorCode == "invalid_passkey"
     }
 
     private fun SharedApiToken.toBearerTokens() = BearerTokens(
