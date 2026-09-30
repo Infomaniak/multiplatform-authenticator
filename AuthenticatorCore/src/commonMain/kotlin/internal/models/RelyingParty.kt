@@ -25,5 +25,5 @@ internal data class RelyingParty(
     val id: String,
     val name: String,
     @SerialName("icon")
-    val iconUrl: String?,
+    val iconUrl: String? = null,
 )

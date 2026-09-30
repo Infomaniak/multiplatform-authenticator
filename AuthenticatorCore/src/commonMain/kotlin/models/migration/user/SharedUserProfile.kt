@@ -27,13 +27,13 @@ import kotlinx.serialization.Transient
 data class SharedUserProfile(
     val id: Int,
     @SerialName("display_name")
-    val displayName: String?,
+    val displayName: String? = null,
     @SerialName("first_name")
     val firstname: String,
     @SerialName("last_name")
     val lastname: String,
     val email: String,
-    val avatar: String?,
+    val avatar: String? = null,
     val login: String,
     @SerialName("is_staff")
     val isStaff: Boolean = false,

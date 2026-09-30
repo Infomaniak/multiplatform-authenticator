@@ -23,5 +23,5 @@ import kotlinx.serialization.Serializable
 internal data class User(
     val id: String,
     val name: String,
-    val displayName: String?,
+    val displayName: String? = null,
 )
