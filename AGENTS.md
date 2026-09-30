@@ -190,6 +190,8 @@ Add KMP-specific corrections here as they occur.
 
 - Prefer `internal` visibility by default; only widen to `public` when the symbol is part of the cross-platform API surface.
 - Use the `Shared*` prefix for migration / interop models exposed to Swift to avoid name collisions.
+- Any nullable field of a model decoded from a backend response must have an explicit `= null` default.
+  kotlinx.serialization treats nullable-without-default as a required JSON key (absent key → `MissingFieldException`).
 
 ## Self-correction
 
