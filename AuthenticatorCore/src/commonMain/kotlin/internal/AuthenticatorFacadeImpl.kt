@@ -92,10 +92,10 @@ internal class AuthenticatorFacadeImpl(
     private val authenticatorManager: AuthenticatorManager,
     private val migrationManager: MigrationManager,
     private val authenticatorBridge: AuthenticatorBridge,
-    private val crashReport: CrashReportInterface,
+    override val crashReport: CrashReportInterface,
     shouldLogStatusChanges: Boolean,
     coroutineScope: CoroutineScope,
-) : AuthenticatorFacade() {
+) : AuthenticatorFacade(), CrashReportHost {
 
     private val blockLogger = BlockLogger.breadcrumbsLogger(crashReport, "lib.kmp")
 
@@ -230,6 +230,7 @@ internal class AuthenticatorFacadeImpl(
         }
     }
 
+    context(host: CrashReportHost)
     private fun accountStatusForUser(userId: Long): Flow<Account.Status> =
         dao.getAccountAsFlow(userId).transformLatest { entity ->
             val status = entity?.status
@@ -258,6 +259,7 @@ internal class AuthenticatorFacadeImpl(
         { atLeastOneConnectedAccount.first { it } },
     )
 
+    context(host: CrashReportHost)
     private suspend fun FlowCollector<Account.Status.NotConnected>.registrationAttempts(notRegisteredAccount: AccountEntity) {
         val passKeyAlreadyRegistered = when (val accountStatus = notRegisteredAccount.status) {
             Status.PasskeyRegistrationPending -> false
@@ -327,6 +329,7 @@ internal class AuthenticatorFacadeImpl(
         }
     }
 
+    context(host: CrashReportHost)
     private suspend inline fun FlowCollector<Account.Status.NotConnected>.tryCrossAppLogin(
         notConnectedAccount: AccountEntity,
         onLoginSuccess: () -> Nothing
@@ -348,6 +351,7 @@ internal class AuthenticatorFacadeImpl(
         }
     }
 
+    context(host: CrashReportHost)
     private suspend inline fun FlowCollector<Account.Status.NotConnected>.tryToMigrateViaOngoingLogin(
         notConnectedAccount: AccountEntity,
         onLoginSuccess: () -> Nothing
@@ -437,6 +441,7 @@ internal class AuthenticatorFacadeImpl(
         credentialsAsync.await()
     }
 
+    context(host: CrashReportHost)
     private suspend fun FlowCollector<Account.Status.NotConnected>.restoreFromBackupAttempts(account: AccountEntity) {
         withRetries(userId = account.id) {
             emit(Account.Status.NotConnected.AttemptingToConnect)
@@ -493,34 +498,37 @@ internal class AuthenticatorFacadeImpl(
             profileRefreshesTrigger.first()
         }
     }
+}
 
-    private suspend inline fun <R> FlowCollector<Account.Status.NotConnected>.withRetries(
-        userId: Long,
-        onGiveUp: () -> Unit = {},
-        block: () -> R
-    ): R {
-        while (true) {
-            runCatching {
-                return block()
-            }.cancellable().onFailure {
-                it.printStackTrace()
-                it.reportIfNeeded(userId, "account connection attempt failed")
-                if (it is IllegalStateException || it is IllegalArgumentException) { // Local errors, no recourse.
-                    val issue = Issue.NonRetriable(it.message ?: it::class.simpleName ?: "$it")
-                    emit(Account.Status.NotConnected.LoginFailed(issue))
-                    awaitCancellation()
-                }
-                val issueCause = it.toIssueCause()
-                val shouldRetryAsync = CompletableDeferred<Boolean>()
-                val issue = Issue.Retriable(cause = issueCause, proceed = shouldRetryAsync::complete)
+context(host: CrashReportHost)
+private suspend inline fun <R> FlowCollector<Account.Status.NotConnected>.withRetries(
+    userId: Long,
+    onGiveUp: () -> Unit = {},
+    block: () -> R
+): R {
+    while (true) {
+        runCatching {
+            return block()
+        }.cancellable().onFailure {
+            it.printStackTrace()
+            it.reportIfNeeded(userId, "account connection attempt failed")
+            if (it is IllegalStateException || it is IllegalArgumentException) { // Local errors, no recourse.
+                val issue = Issue.NonRetriable(it.message ?: it::class.simpleName ?: "$it")
                 emit(Account.Status.NotConnected.LoginFailed(issue))
-                val shouldRetry = shouldRetryAsync.await()
-                if (shouldRetry) continue else onGiveUp()
+                awaitCancellation()
             }
+            val issueCause = it.toIssueCause()
+            val shouldRetryAsync = CompletableDeferred<Boolean>()
+            val issue = Issue.Retriable(cause = issueCause, proceed = shouldRetryAsync::complete)
+            emit(Account.Status.NotConnected.LoginFailed(issue))
+            val shouldRetry = shouldRetryAsync.await()
+            if (shouldRetry) continue else onGiveUp()
         }
     }
+}
 
-    private fun Throwable.toIssueCause(): Cause = when (this) {
+private fun Throwable.toIssueCause(): Cause {
+    return when (this) {
         is NetworkException, is IOException -> Cause.NetworkIssue
         is ApiException if (statusCode == 503) -> Cause.ServerUnavailable
         is ApiException.ApiErrorException -> {
@@ -533,16 +541,19 @@ internal class AuthenticatorFacadeImpl(
             Cause.Other(11_000, message ?: this::class.simpleName ?: "$this")
         }
     }
+}
 
-    private fun Throwable.reportIfNeeded(userId: Long, message: String) {
-        when (this) {
-            is NetworkException, is IOException -> Unit
-            is ApiException if (statusCode == 503) -> Unit
-            else -> crashReport.capture(userId, message, this)
-        }
+context(host: CrashReportHost)
+fun Throwable.reportIfNeeded(userId: Long, message: String) {
+    when (this) {
+        is NetworkException, is IOException -> Unit
+        is ApiException if (statusCode == 503) -> Unit
+        else -> host.crashReport.capture(userId, message, this)
     }
+}
 
-    private suspend fun logStatusChanges(): Nothing = coroutineScope {
+private suspend fun AuthenticatorFacade.logStatusChanges(): Nothing {
+    coroutineScope {
         launch {
             accounts.collect { accounts ->
                 accounts.forEach { account ->
@@ -552,4 +563,8 @@ internal class AuthenticatorFacadeImpl(
         }
         appStatus.collect { println("appStatus: $it") }
     }
+}
+
+interface CrashReportHost {
+    val crashReport: CrashReportInterface
 }
