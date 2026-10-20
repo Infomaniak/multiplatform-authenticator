@@ -20,52 +20,39 @@
 package com.infomaniak.multiplatform_authenticator.core.internal
 
 import com.infomaniak.multiplatform_authenticator.core.Account
-import com.infomaniak.multiplatform_authenticator.core.Account.Status.NotConnected.ReLogin
 import com.infomaniak.multiplatform_authenticator.core.AppStatus
 import com.infomaniak.multiplatform_authenticator.core.AuthenticatorFacade
-import com.infomaniak.multiplatform_authenticator.core.CredentialsForMigration
-import com.infomaniak.multiplatform_authenticator.core.Issue
-import com.infomaniak.multiplatform_authenticator.core.Issue.Retriable.Cause
-import com.infomaniak.multiplatform_authenticator.core.internal.db.AccountEntity
 import com.infomaniak.multiplatform_authenticator.core.internal.db.AccountEntity.Status
 import com.infomaniak.multiplatform_authenticator.core.internal.db.AccountsDatabase
-import com.infomaniak.multiplatform_authenticator.core.internal.extensions.cancellable
 import com.infomaniak.multiplatform_authenticator.core.internal.extensions.firstOrElse
 import com.infomaniak.multiplatform_authenticator.core.internal.extensions.toAccount
 import com.infomaniak.multiplatform_authenticator.core.internal.extensions.toAccountEntity
+import com.infomaniak.multiplatform_authenticator.core.internal.logic.AccountStatusHost
+import com.infomaniak.multiplatform_authenticator.core.internal.logic.CrashReportHost
+import com.infomaniak.multiplatform_authenticator.core.internal.logic.MigrationHost
+import com.infomaniak.multiplatform_authenticator.core.internal.logic.RegistrationHost
+import com.infomaniak.multiplatform_authenticator.core.internal.logic.UserProfileUpdateHost
+import com.infomaniak.multiplatform_authenticator.core.internal.logic.accountStatusForUser
+import com.infomaniak.multiplatform_authenticator.core.internal.logic.appStatusFlow
+import com.infomaniak.multiplatform_authenticator.core.internal.logic.logStatusChanges
 import com.infomaniak.multiplatform_authenticator.core.internal.managers.AuthenticatorManager
 import com.infomaniak.multiplatform_authenticator.core.internal.managers.MigrationManager
-import com.infomaniak.multiplatform_authenticator.core.internal.otp.deleteLegacyAccount
-import com.infomaniak.multiplatform_authenticator.core.internal.otp.deleteLegacyDB
-import com.infomaniak.multiplatform_authenticator.core.internal.otp.getLegacyAccounts
 import com.infomaniak.multiplatform_authenticator.core.internal.requests.AuthenticatorRequests
 import com.infomaniak.multiplatform_authenticator.core.internal.utils.buildFlowWithElements
 import com.infomaniak.multiplatform_authenticator.core.internal.utils.dynamicLazyMapOfSharedFlow
-import com.infomaniak.multiplatform_authenticator.core.internal.utils.launchRacer
-import com.infomaniak.multiplatform_authenticator.core.internal.utils.race
 import com.infomaniak.multiplatform_authenticator.core.internal.utils.raceOf
-import com.infomaniak.multiplatform_authenticator.core.internal.utils.waitForComplete
-import com.infomaniak.multiplatform_authenticator.core.internal.utils.withTimeoutOrNull
 import com.infomaniak.multiplatform_authenticator.core.logging.BlockLogger
 import com.infomaniak.multiplatform_authenticator.core.logging.breadcrumbsLogger
 import com.infomaniak.multiplatform_authenticator.core.models.migration.user.SharedUserProfile
-import com.infomaniak.multiplatform_authenticator.core.network.exceptions.ApiException
-import com.infomaniak.multiplatform_authenticator.core.network.exceptions.NetworkException
 import com.infomaniak.multiplatform_authenticator.core.network.interfaces.AuthenticatorBridge
 import com.infomaniak.multiplatform_authenticator.core.network.interfaces.CrashReportInterface
-import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CompletableJob
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.awaitCancellation
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.channels.ReceiveChannel
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -80,26 +67,24 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
-import kotlinx.coroutines.flow.transformLatest
 import kotlinx.coroutines.launch
-import kotlinx.io.IOException
 import kotlin.time.Duration.Companion.seconds
 
 internal class AuthenticatorFacadeImpl(
     accountsDatabase: AccountsDatabase,
-    private val clientId: String,
-    val authenticatorRequests: AuthenticatorRequests,
-    private val authenticatorManager: AuthenticatorManager,
-    private val migrationManager: MigrationManager,
-    private val authenticatorBridge: AuthenticatorBridge,
+    override val clientId: String,
+    override val authenticatorRequests: AuthenticatorRequests,
+    override val authenticatorManager: AuthenticatorManager,
+    override val migrationManager: MigrationManager,
+    override val authenticatorBridge: AuthenticatorBridge,
     override val crashReport: CrashReportInterface,
     shouldLogStatusChanges: Boolean,
     coroutineScope: CoroutineScope,
-) : AuthenticatorFacade(), CrashReportHost {
+) : AuthenticatorFacade(), CrashReportHost, MigrationHost, UserProfileUpdateHost, RegistrationHost, AccountStatusHost {
 
-    private val blockLogger = BlockLogger.breadcrumbsLogger(crashReport, "lib.kmp")
+    override val blockLogger = BlockLogger.breadcrumbsLogger(crashReport, "lib.kmp")
 
-    private val dao = accountsDatabase.getDao()
+    override val dao = accountsDatabase.getDao()
 
     private val accountEntities = flow {
         migrationManager.setBackedUpAccountsStatus()
@@ -116,7 +101,10 @@ internal class AuthenticatorFacadeImpl(
             delay(5.seconds) // Should be more than enough to keep the state between re-uses.
         }
     ) { userId: Long ->
-        accountStatusForUser(userId)
+        accountStatusForUser(
+            userId = userId,
+            waitForProfileRefreshTrigger = { profileRefreshesTrigger.first() },
+        )
     }
 
     private val proceedMigration: CompletableJob = Job()
@@ -137,8 +125,10 @@ internal class AuthenticatorFacadeImpl(
         }
     }.flowOn(Dispatchers.Default).conflate().distinctUntilChanged().shareIn(coroutineScope, SharingStarted.Eagerly, replay = 1)
 
-    override val appStatus: SharedFlow<AppStatus> = appStatusFlow()
-        .shareIn(coroutineScope, SharingStarted.Eagerly, replay = 1)
+    override val appStatus: SharedFlow<AppStatus> = appStatusFlow(
+        accounts = accounts,
+        proceedMigration = proceedMigration,
+    ).shareIn(coroutineScope, SharingStarted.Eagerly, replay = 1)
 
     init {
         if (shouldLogStatusChanges) coroutineScope.launch { logStatusChanges() }
@@ -167,404 +157,8 @@ internal class AuthenticatorFacadeImpl(
         profileRefreshesTrigger.tryEmit(Unit)
     }
 
-    private fun appStatusFlow(): Flow<AppStatus> = flow {
-        var needsToShowEverythingReady = false
-
-        val appStatusFlow: Flow<AppStatus> = accounts.transformLatest { accounts ->
-            val atLeastOneConnectedAccount = accounts.any { it.status is Account.Status.LoggedIn }
-            val noConnectedAccount = !atLeastOneConnectedAccount
-
-            if (noConnectedAccount) {
-                needsToShowEverythingReady = true
-                if (accounts.isEmpty()) {
-                    emit(AppStatus.LoginRequired.NotMigrating)
-                    /** Waiting for [addAccounts] to be called, which will cancel this, as `accountEntities` emits. */
-                    awaitCancellation()
-                } else {
-                    val needsMigration = accounts.any { it.status == Account.Status.NotConnected.AttemptingToConnect.ToBeMigrated }
-                    if (needsMigration) {
-                        emit(AppStatus.LoginRequired.MigratingFromLegacyKAuth(proceed = proceedMigration::complete))
-                        proceedMigration.join()
-                    }
-                    emit(AppStatus.LoggingIn)
-                    handleLoggingInStatus(accounts)
-                }
-            } else if (needsToShowEverythingReady) {
-                waitForComplete { proceedAsync ->
-                    emit(AppStatus.EverythingReady(proceed = proceedAsync::complete))
-                }
-            }
-            while (true) {
-                needsToShowEverythingReady = false
-                waitForComplete { addAnAccountAsync ->
-                    emit(AppStatus.SetupComplete(addAnAccount = addAnAccountAsync::complete))
-                }
-                needsToShowEverythingReady = true
-                waitForComplete { backAsync ->
-                    emit(AppStatus.AddingAnAccount(cancel = backAsync::complete))
-                }
-            }
-        }
-
-        emitAll(appStatusFlow)
-    }.distinctUntilChanged()
-
-    private suspend fun FlowCollector<AppStatus.LoginRequired.MustReLogin>.handleLoggingInStatus(accounts: List<Account>) {
-        val stillTryingToConnect = accounts.any { account ->
-            account.status is Account.Status.NotConnected.AttemptingToConnect
-        }
-        if (stillTryingToConnect) {
-            awaitCancellation() // If at least one account is still loading, wait for the next update (i.e. cancellation)
-        }
-
-        val accountToRelogin: Account = when (accounts.size) {
-            1 if accounts.single().status is ReLogin -> accounts.single()
-            else -> {
-                /** Continue towards [AppStatus.SetupComplete] to let the user handle failures, or re-login accounts separately */
-                return
-            }
-        }
-        /** Continue towards [AppStatus.SetupComplete] if the user asks to skip. */
-        waitForComplete { skipAsync ->
-            emit(AppStatus.LoginRequired.MustReLogin(accountToRelogin.id, skipAsync::complete))
-        }
-    }
-
-    context(host: CrashReportHost)
-    private fun accountStatusForUser(userId: Long): Flow<Account.Status> =
-        dao.getAccountAsFlow(userId).transformLatest { entity ->
-            val status = entity?.status
-            blockLogger.withLog("accountStatusForUser($status)") {
-                when (status) {
-                    Status.ToBeMigrated -> migrationAttempts(entity)
-                    Status.PasskeyRegistrationPending, Status.FirstPasskeyAuthenticationPending -> {
-                        registrationAttempts(entity)
-                    }
-                    Status.RestoringFromBackup, Status.DeletingOldKeyAfterRestoration -> {
-                        restoreFromBackupAttempts(account = entity)
-                    }
-                    Status.LoggedIn, Status.PasswordChanged -> {
-                        handledLoggedInState(entity)
-                    }
-                    Status.Disconnected -> {
-                        handleDisconnectedState(entity)
-                    }
-                    null -> Unit // Should not happen in practice.
-                }
-            }
-        }
-
-    private suspend fun waitForMigrationStartSignal(): Unit = raceOf(
+    override suspend fun waitForMigrationStartSignal(): Unit = raceOf(
         { proceedMigration.join() },
         { atLeastOneConnectedAccount.first { it } },
     )
-
-    context(host: CrashReportHost)
-    private suspend fun FlowCollector<Account.Status.NotConnected>.registrationAttempts(notRegisteredAccount: AccountEntity) {
-        val passKeyAlreadyRegistered = when (val accountStatus = notRegisteredAccount.status) {
-            Status.PasskeyRegistrationPending -> false
-            Status.FirstPasskeyAuthenticationPending -> true
-            else -> throw IllegalArgumentException("registrationAttempts doesn't support $accountStatus")
-        }
-        val userId = notRegisteredAccount.id
-        withRetries(userId = userId) {
-            emit(Account.Status.NotConnected.AttemptingToConnect)
-            if (!passKeyAlreadyRegistered) {
-                val temporaryToken = authenticatorBridge.getTokenFromDatabase(userId)
-                    ?: error("Temporary token missing in DB for userId=$userId")
-                // Just in case orphans passkeys are lying around, we want to make sure to start from a clean state.
-                authenticatorManager.deleteKeysFor(notRegisteredAccount.id)
-                val _ = authenticatorManager.registerPasskey(temporaryToken.accessToken, userId)
-                dao.upsert(notRegisteredAccount.copy(status = Status.FirstPasskeyAuthenticationPending))
-                // The DB update above is expected to cause the cancellation & restart of this.
-            }
-
-            val token = authenticatorManager.getToken(
-                clientId = clientId,
-                userId = userId,
-            ).firstOrElse { error("Key not found: ${it.details}") }
-            authenticatorBridge.attemptPersistingTokenForAccount(userId, token)
-            val profile = authenticatorManager.getUserProfile(token.accessToken).also { it.apiToken = token }
-            authenticatorBridge.persistUserProfile(profile)
-            
-            cleanupLegacyAccountIfNeeded(userId)
-            dao.upsert(
-                notRegisteredAccount.copy(
-                    securityScore = profile.preferences.security?.score,
-                    lastPasswordUpdate = profile.preferences.security?.dateLastChangedPassword,
-                    status = Status.LoggedIn
-                )
-            )
-        }
-    }
-
-    private suspend fun cleanupLegacyAccountIfNeeded(userId: Long) {
-        if (getLegacyAccounts().none { it.userId.toLong() == userId }) return
-        deleteLegacyAccount(userId.toString())
-        if (getLegacyAccounts().isEmpty()) deleteLegacyDB()
-    }
-
-    /**
-     * Tries to migrate the given account from kAuth to Infomaniak Authenticator, with retries,
-     * and emits the relevant [Account.Status.NotConnected] as needed.
-     *
-     * 1. Tries to perform a login (3 different ways)
-     * 2. Starts a migration session against the backend
-     * 3. Registers a passkey
-     * 4. Authenticate with it, getting a new access token
-     */
-    private suspend fun FlowCollector<Account.Status.NotConnected>.migrationAttempts(accountToMigrate: AccountEntity) {
-        require(accountToMigrate.status == Status.ToBeMigrated)
-        emit(Account.Status.NotConnected.AttemptingToConnect.ToBeMigrated)
-
-        waitForMigrationStartSignal()
-        blockLogger.withLog("migrationAttempts.tryCrossAppLogin") {
-            tryCrossAppLogin(accountToMigrate) { return }
-        }
-        blockLogger.withLog("migrationAttempts.tryToMigrateViaOngoingLogin") {
-            tryToMigrateViaOngoingLogin(accountToMigrate) { return }
-        }
-        blockLogger.withLog("migrationAttempts.tryMigratingWithReLogin") {
-            tryMigratingWithReLogin(accountToMigrate)
-        }
-    }
-
-    context(host: CrashReportHost)
-    private suspend inline fun FlowCollector<Account.Status.NotConnected>.tryCrossAppLogin(
-        notConnectedAccount: AccountEntity,
-        onLoginSuccess: () -> Nothing
-    ) {
-        val userId = notConnectedAccount.id
-        withRetries(userId, onGiveUp = { return }) {
-            emit(Account.Status.NotConnected.AttemptingToConnect)
-            val temporaryToken = withTimeoutOrNull(
-                waitForTimeout = {
-                    delay(8.seconds)
-                    "getTokenFromCrossAppLogin timed out"
-                },
-                onTimeout = { message -> crashReport.capture(userId, message) }
-            ) {
-                authenticatorBridge.getTokenFromCrossAppLogin(userId)
-            } ?: return
-            val authentication = MigrationAuthentication.CrossAppLogin(temporaryToken)
-            if (attemptMigration(notConnectedAccount, authentication)) onLoginSuccess() else return
-        }
-    }
-
-    context(host: CrashReportHost)
-    private suspend inline fun FlowCollector<Account.Status.NotConnected>.tryToMigrateViaOngoingLogin(
-        notConnectedAccount: AccountEntity,
-        onLoginSuccess: () -> Nothing
-    ) {
-        withRetries(notConnectedAccount.id, onGiveUp = { return }) {
-            emit(Account.Status.NotConnected.AttemptingToConnect)
-            val authentication = MigrationAuthentication.OngoingLogin
-            if (attemptMigration(notConnectedAccount, authentication)) onLoginSuccess() else return
-        }
-    }
-
-    private suspend fun attemptMigration(
-        notConnectedAccount: AccountEntity,
-        authentication: MigrationAuthentication,
-    ): Boolean {
-        val userId = notConnectedAccount.id
-        val succeeded = migrationManager.tryMigrating(
-            userId = userId,
-            authentication = authentication,
-        )
-
-        if (!succeeded) return false
-
-        dao.upsert(notConnectedAccount.copy(status = Status.FirstPasskeyAuthenticationPending))
-
-        return true
-    }
-
-    private suspend fun FlowCollector<ReLogin>.tryMigratingWithReLogin(accountToMigrate: AccountEntity) {
-        var status = ReLogin(
-            legacyAccount = accountToMigrate.toAccount(Account.Status.NotConnected.AttemptingToConnect),
-            hadIncorrectPassword = false,
-            lastIssue = null,
-            sendCredentials = null
-        )
-        val issueDismissals = Channel<Unit>(capacity = Channel.CONFLATED)
-        loop@ while (true) {
-            status = runCatching {
-                val credentialsAsync = CompletableDeferred<CredentialsForMigration>()
-                status = status.copy(sendCredentials = credentialsAsync::complete)
-                emit(status)
-                val credentialsForMigration = awaitCredentialsWhileAllowingIssueDismissal(
-                    credentialsAsync = credentialsAsync,
-                    issueDismissals = issueDismissals,
-                    lastStatus = status,
-                    onStatusUpdate = { newStatus ->
-                        status = newStatus
-                        emit(status)
-                    }
-                )
-                status = status.copy(hadIncorrectPassword = false, lastIssue = null, sendCredentials = null)
-                emit(status)
-                val authentication = MigrationAuthentication.NoOngoingLogin(credentialsForMigration.password)
-                val succeeded = attemptMigration(accountToMigrate, authentication)
-                when {
-                    succeeded -> return
-                    else -> status.copy(hadIncorrectPassword = true)
-                }
-            }.cancellable().getOrElse {
-                it.printStackTrace()
-                // TODO Delete the capture method here after investigation
-                crashReport.capture(accountToMigrate.id, "re-login migration attempt failed", it)
-                // TODO Uncomment this when investigation is done
-                // it.reportIfNeeded(accountToMigrate.id, message = "re-login migration attempt failed")
-                val issue = ReLogin.DismissableIssue(
-                    dismiss = { issueDismissals.trySend(Unit) },
-                    cause = it.toIssueCause()
-                )
-                status.copy(lastIssue = issue)
-            }
-        }
-    }
-
-    private suspend inline fun awaitCredentialsWhileAllowingIssueDismissal(
-        credentialsAsync: CompletableDeferred<CredentialsForMigration>,
-        issueDismissals: ReceiveChannel<Unit>,
-        lastStatus: ReLogin,
-        onStatusUpdate: (newStatus: ReLogin) -> Unit,
-    ): CredentialsForMigration = race {
-        launchRacer { credentialsAsync.await() }
-        if (lastStatus.lastIssue != null) launchRacer {
-            issueDismissals.receive()
-            null
-        }
-    } ?: run {
-        onStatusUpdate(lastStatus.copy(lastIssue = null))
-        credentialsAsync.await()
-    }
-
-    context(host: CrashReportHost)
-    private suspend fun FlowCollector<Account.Status.NotConnected>.restoreFromBackupAttempts(account: AccountEntity) {
-        withRetries(userId = account.id) {
-            emit(Account.Status.NotConnected.AttemptingToConnect)
-            migrationManager.restore(account = account) { userId, token ->
-                authenticatorBridge.attemptPersistingTokenForAccount(userId, token)
-            }
-        }
-    }
-
-    private suspend fun FlowCollector<Account.Status.LoggedIn>.handledLoggedInState(account: AccountEntity) {
-        val needsToAcknowledgePasswordUpdate: Boolean = account.status == Status.PasswordChanged
-        if (needsToAcknowledgePasswordUpdate) {
-            val previousStatus = waitForComplete { passwordChangedAcknowledgedAsync ->
-                Account.Status.LoggedIn(
-                    securityScore = account.securityScore,
-                    passwordChangedAck = passwordChangedAcknowledgedAsync::complete
-                ).also { emit(it) }
-            }
-            emit(previousStatus.copy(passwordChangedAck = null))
-            dao.upsert(account.copy(status = Status.LoggedIn))
-        } else {
-            emit(Account.Status.LoggedIn(securityScore = account.securityScore))
-        }
-        updateUserProfileLoop(account)
-    }
-
-    private suspend fun FlowCollector<Account.Status.NotConnected.Disconnected>.handleDisconnectedState(account: AccountEntity) {
-        waitForComplete { disconnectionRequest ->
-            val status = Account.Status.NotConnected.Disconnected(disconnectionRequest::complete)
-            emit(status)
-        }
-        authenticatorManager.removeAccount(token = null, userId = account.id)
-    }
-
-    private suspend fun updateUserProfileLoop(account: AccountEntity) {
-        require(account.isLoggedIn)
-        while (true) {
-            runCatching {
-                val profile = authenticatorRequests.getUserProfile(account.id)
-                val profileSecurity = requireNotNull(profile.preferences.security)
-                val newStatus = when (account.lastPasswordUpdate) {
-                    profileSecurity.dateLastChangedPassword -> account.status
-                    else -> Status.PasswordChanged
-                }
-                val updatedAccount = profile.toAccountEntity(status = newStatus)
-                if (updatedAccount != account) { // Avoid re-trigger loops when we're up to date.
-                    dao.upsert(updatedAccount)
-                    authenticatorBridge.persistUserProfile(profile)
-                }
-            }.cancellable().onFailure {
-                it.printStackTrace()
-                it.reportIfNeeded(account.id, message = "profile update refresh failed")
-            }
-            profileRefreshesTrigger.first()
-        }
-    }
-}
-
-context(host: CrashReportHost)
-private suspend inline fun <R> FlowCollector<Account.Status.NotConnected>.withRetries(
-    userId: Long,
-    onGiveUp: () -> Unit = {},
-    block: () -> R
-): R {
-    while (true) {
-        runCatching {
-            return block()
-        }.cancellable().onFailure {
-            it.printStackTrace()
-            it.reportIfNeeded(userId, "account connection attempt failed")
-            if (it is IllegalStateException || it is IllegalArgumentException) { // Local errors, no recourse.
-                val issue = Issue.NonRetriable(it.message ?: it::class.simpleName ?: "$it")
-                emit(Account.Status.NotConnected.LoginFailed(issue))
-                awaitCancellation()
-            }
-            val issueCause = it.toIssueCause()
-            val shouldRetryAsync = CompletableDeferred<Boolean>()
-            val issue = Issue.Retriable(cause = issueCause, proceed = shouldRetryAsync::complete)
-            emit(Account.Status.NotConnected.LoginFailed(issue))
-            val shouldRetry = shouldRetryAsync.await()
-            if (shouldRetry) continue else onGiveUp()
-        }
-    }
-}
-
-private fun Throwable.toIssueCause(): Cause {
-    return when (this) {
-        is NetworkException, is IOException -> Cause.NetworkIssue
-        is ApiException if (statusCode == 503) -> Cause.ServerUnavailable
-        is ApiException.ApiErrorException -> {
-            Cause.Other(12_000 + statusCode, "http $statusCode $errorCode $errorMessage")
-        }
-        is ApiException.UnexpectedApiErrorFormatException -> {
-            Cause.Other(22_000 + statusCode, "http $statusCode $bodyResponse")
-        }
-        else -> {
-            Cause.Other(11_000, message ?: this::class.simpleName ?: "$this")
-        }
-    }
-}
-
-context(host: CrashReportHost)
-fun Throwable.reportIfNeeded(userId: Long, message: String) {
-    when (this) {
-        is NetworkException, is IOException -> Unit
-        is ApiException if (statusCode == 503) -> Unit
-        else -> host.crashReport.capture(userId, message, this)
-    }
-}
-
-private suspend fun AuthenticatorFacade.logStatusChanges(): Nothing {
-    coroutineScope {
-        launch {
-            accounts.collect { accounts ->
-                accounts.forEach { account ->
-                    println("Account ${account.id} (${account.initials}) has status: ${account.status}")
-                }
-            }
-        }
-        appStatus.collect { println("appStatus: $it") }
-    }
-}
-
-interface CrashReportHost {
-    val crashReport: CrashReportInterface
 }
