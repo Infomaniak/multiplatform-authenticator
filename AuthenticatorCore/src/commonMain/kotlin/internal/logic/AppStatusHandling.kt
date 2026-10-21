@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.transformLatest
 
-fun appStatusFlow(
+internal fun appStatusFlow(
     accounts: Flow<List<Account>>,
     proceedMigration: CompletableJob,
 ): Flow<AppStatus> = flow {
