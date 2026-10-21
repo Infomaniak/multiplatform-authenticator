@@ -107,7 +107,7 @@ internal class AuthenticatorFacadeImpl(
         )
     }
 
-    private val proceedMigration: CompletableJob = Job()
+    private val proceedMigrationSignal: CompletableJob = Job()
 
     private val profileRefreshesTrigger = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
 
@@ -126,8 +126,8 @@ internal class AuthenticatorFacadeImpl(
     }.flowOn(Dispatchers.Default).conflate().distinctUntilChanged().shareIn(coroutineScope, SharingStarted.Eagerly, replay = 1)
 
     override val appStatus: SharedFlow<AppStatus> = appStatusFlow(
-        accounts = accounts,
-        proceedMigration = proceedMigration,
+        accountsFlow = accounts,
+        proceedMigrationSignal = proceedMigrationSignal,
     ).shareIn(coroutineScope, SharingStarted.Eagerly, replay = 1)
 
     init {
@@ -158,7 +158,7 @@ internal class AuthenticatorFacadeImpl(
     }
 
     override suspend fun waitForMigrationStartSignal(): Unit = raceOf(
-        { proceedMigration.join() },
+        { proceedMigrationSignal.join() },
         { atLeastOneConnectedAccount.first { it } },
     )
 }

@@ -17,13 +17,13 @@ import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.transformLatest
 
-fun appStatusFlow(
-    accounts: Flow<List<Account>>,
-    proceedMigration: CompletableJob,
+internal fun appStatusFlow(
+    accountsFlow: Flow<List<Account>>,
+    proceedMigrationSignal: CompletableJob,
 ): Flow<AppStatus> = flow {
     var needsToShowEverythingReady = false
 
-    val appStatusFlow: Flow<AppStatus> = accounts.transformLatest { accounts ->
+    val appStatusFlow: Flow<AppStatus> = accountsFlow.transformLatest { accounts ->
         val atLeastOneConnectedAccount = accounts.any { it.status is Account.Status.LoggedIn }
         val noConnectedAccount = !atLeastOneConnectedAccount
 
@@ -39,8 +39,8 @@ fun appStatusFlow(
             } else {
                 val needsMigration = accounts.any { it.status == Account.Status.NotConnected.AttemptingToConnect.ToBeMigrated }
                 if (needsMigration) {
-                    emit(AppStatus.LoginRequired.MigratingFromLegacyKAuth(proceed = proceedMigration::complete))
-                    proceedMigration.join()
+                    emit(AppStatus.LoginRequired.MigratingFromLegacyKAuth(proceed = proceedMigrationSignal::complete))
+                    proceedMigrationSignal.join()
                 }
                 emit(AppStatus.LoggingIn)
                 handleLoggingInStatus(accounts)
