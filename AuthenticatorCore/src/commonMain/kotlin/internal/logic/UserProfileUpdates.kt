@@ -21,8 +21,8 @@ internal suspend fun updateUserProfileLoop(
             }
             val updatedAccount = profile.toAccountEntity(status = newStatus)
             if (updatedAccount != account) { // Avoid re-trigger loops when we're up to date.
-                host.dao.upsert(updatedAccount)
                 host.authenticatorBridge.persistUserProfile(profile)
+                host.dao.upsert(updatedAccount) // Last because this will trigger cancellation from latest operator upwards.
             }
         }.cancellable().onFailure {
             it.printStackTrace()
